@@ -2,15 +2,4 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="beigeBackground">#FFFDEE</color>
-    <color name="lightestBlueBackground">#C1E0D4</color>
-    <color name="darkestBlueMainText">#160800</color>
-    <color name="darkBlueTitle">#0A3A40</color>
-    <color name="regularBlueButton">#118C8C</color>
-    <color name="pinkAction">#FF686B</color>
-    <color name="greenAcceptedOrder">#0AAC53</color>
-    <color name="yellowPendingOrder">#ACAC0A</color>
-    <color name="grayRejectedOrder">#879999</color>
-    <color name="redOrderAlert">#FF1A1A</color>
-
 </resources>

@@ -2,15 +2,31 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Background -->
     <color name="beigeBackground">#FFFDEE</color>
     <color name="lightestBlueBackground">#C1E0D4</color>
+
+    <!-- Texts -->
     <color name="darkestBlueMainText">#160800</color>
     <color name="darkBlueTitle">#0A3A40</color>
-    <color name="regularBlueButton">#118C8C</color>
-    <color name="pinkAction">#FF686B</color>
-    <color name="greenAcceptedOrder">#0AAC53</color>
-    <color name="yellowPendingOrder">#ACAC0A</color>
-    <color name="grayRejectedOrder">#879999</color>
-    <color name="redOrderAlert">#FF1A1A</color>
+    <color name="grayText">#666666</color>
+    <color name="brownText">#5D544E</color>
 
+    <!-- Buttons & UI Elements -->
+    <color name="regularBlue">#118C8C</color>
+    <color name="pinkActionButton">#FF686B</color>
+    <color name="alertRed">#FF4B4B</color>
+
+    <!-- Profile Specific -->
+    <color name="aquaMarin">#C3DCD4</color>
+    <color name="nerevianFieldBg">#FFFFF4</color>
+    <color name="profile_field_label">#118C8C</color>
+
+    <!-- Icons BG -->
+    <color name="icon_bg_teal">#B2DFDB</color>
+    <color name="icon_bg_red">#FFCDD2</color>
+
+    <!-- Bottom Nav -->
+    <color name="bottomNavBg">#0A3A40</color>
 </resources>

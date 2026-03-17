@@ -5,68 +5,63 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_cream"
+    android:background="@color/beigeBackground"
     tools:context=".LoginActivity">
 
     <LinearLayout
-        android:id="@+id/logoContainer"
+        android:id="@+id/logo_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/emailInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Approximate Logo -->
         <FrameLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="N"
-                android:textColor="@color/nerevian_dark"
-                android:textSize="100sp"
+                android:textColor="#0B3B3C"
+                android:textSize="120sp"
                 android:textStyle="bold" />
 
-            <!-- Simple wave representation -->
             <View
-                android:layout_width="80dp"
-                android:layout_height="20dp"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:background="@color/nerevian_light"
-                android:alpha="0.8" />
+                android:layout_marginTop="10dp"
+                android:alpha="0.6"
+                android:background="#8FA7AB" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="-10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NERE"
-                android:textColor="@color/nerevian_dark"
-                android:textSize="36sp"
                 android:letterSpacing="0.1"
+                android:text="NERE"
+                android:textColor="#0B3B3C"
+                android:textSize="40sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VIAN"
-                android:textColor="@color/nerevian_light"
-                android:textSize="36sp"
                 android:letterSpacing="0.1"
+                android:text="VIAN"
+                android:textColor="#8FA7AB"
+                android:textSize="40sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
@@ -74,53 +69,51 @@
     <EditText
         android:id="@+id/emailInput"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="50dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="60dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/edit_text_background"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/edit_text_rounded"
         android:hint="email:"
         android:inputType="textEmailAddress"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:textColor="@android:color/black"
+        android:textColor="#160800"
         android:textColorHint="#444444"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoContainer" />
+        app:layout_constraintTop_toBottomOf="@id/logo_layout" />
 
     <EditText
         android:id="@+id/passwordInput"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/edit_text_background"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/edit_text_rounded"
         android:hint="password:"
         android:inputType="textPassword"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:textColor="@android:color/black"
+        android:textColor="#160800"
         android:textColorHint="#444444"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailInput" />
+        app:layout_constraintTop_toBottomOf="@id/emailInput" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginEnd="70dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginBottom="80dp"
-        android:background="@drawable/button_background"
+        android:backgroundTint="@color/pinkActionButton"
         android:text="LOGIN"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textAllCaps="false"
+        android:textSize="18sp"
+        app:cornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -11,30 +11,42 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nerevian">
-
         <activity
-            android:name=".HomePageActivity"
+            android:name=".client.OrderDocumentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".agent.UpdateTrackingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".agent.OrderInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".agent.OrderHistoryAgentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".agent.HomePageAgentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".client.HomePageClientActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".LoginActivity"
+            android:name=".common.LoginActivity"
             android:exported="true" />
-
         <activity
-            android:name=".ProfileActivity"
+            android:name=".common.ProfileActivity"
             android:exported="true" />
-
         <activity
-            android:name=".OrderHistory"
+            android:name=".client.OrderHistoryClientActivity"
             android:exported="true" />
-
         <activity
-            android:name=".TrackerActivity"
+            android:name=".client.TrackerActivity"
             android:exported="true" />
     </application>
+
 </manifest>

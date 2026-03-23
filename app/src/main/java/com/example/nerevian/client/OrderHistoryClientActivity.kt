@@ -1,4 +1,4 @@
-package com.example.nerevian
+package com.example.nerevian.client
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,8 +9,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.nerevian.common.ProfileActivity
+import com.example.nerevian.R
 
-class OrderHistory : AppCompatActivity() {
+class OrderHistoryClientActivity : AppCompatActivity() {
 
     private var isAcceptedExpanded = false
     private var isPendingExpanded = false
@@ -21,7 +24,7 @@ class OrderHistory : AppCompatActivity() {
 
         val mainView = findViewById<View>(R.id.main)
         ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
-            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
@@ -83,7 +86,7 @@ class OrderHistory : AppCompatActivity() {
         val navProfile = findViewById<ImageView>(R.id.nav_profile)
 
         navHome.setOnClickListener {
-            startActivity(Intent(this, HomePageActivity::class.java))
+            startActivity(Intent(this, HomePageClientActivity::class.java))
             finish()
         }
         navProfile.setOnClickListener {

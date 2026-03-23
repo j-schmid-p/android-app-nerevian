@@ -1,4 +1,4 @@
-package com.example.nerevian
+package com.example.nerevian.client
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.nerevian.R
+import com.example.nerevian.common.ProfileActivity
 
 class TrackerActivity : AppCompatActivity() {
 
@@ -30,12 +32,12 @@ class TrackerActivity : AppCompatActivity() {
         val navProfile = findViewById<ImageView>(R.id.nav_profile)
 
         navHome.setOnClickListener {
-            startActivity(Intent(this, HomePageActivity::class.java))
+            startActivity(Intent(this, HomePageClientActivity::class.java))
             finish()
         }
 
         navHistory.setOnClickListener {
-            startActivity(Intent(this, OrderHistory::class.java))
+            startActivity(Intent(this, OrderHistoryClientActivity::class.java))
             finish()
         }
 

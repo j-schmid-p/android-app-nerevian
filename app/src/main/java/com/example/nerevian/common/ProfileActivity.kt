@@ -1,4 +1,4 @@
-package com.example.nerevian
+package com.example.nerevian.common
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.nerevian.R
+import com.example.nerevian.client.HomePageClientActivity
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -18,7 +20,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var etBirthdate: EditText
     private lateinit var etId: EditText
     private lateinit var btnEditSave: Button
-    
+
     private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +59,7 @@ class ProfileActivity : AppCompatActivity() {
         val navProfile = findViewById<ImageView>(R.id.nav_profile)
 
         navHome.setOnClickListener {
-            val intent = Intent(this, HomePageActivity::class.java)
+            val intent = Intent(this, HomePageClientActivity::class.java)
             startActivity(intent)
             finish()
         }

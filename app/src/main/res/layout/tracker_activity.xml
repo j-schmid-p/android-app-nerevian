@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beigeBackground"
-    tools:context=".TrackerActivity">
+    tools:context=".client.TrackerActivity">
 
     <ScrollView
         android:layout_width="match_parent"

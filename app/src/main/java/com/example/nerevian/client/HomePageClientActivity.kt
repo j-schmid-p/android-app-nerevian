@@ -1,4 +1,4 @@
-package com.example.nerevian
+package com.example.nerevian.client
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,10 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.nerevian.common.ProfileActivity
+import com.example.nerevian.R
 
-class HomePageActivity : AppCompatActivity() {
+class HomePageClientActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,7 @@ class HomePageActivity : AppCompatActivity() {
         }
 
         navHistory.setOnClickListener {
-            val intent = Intent(this, OrderHistory::class.java)
+            val intent = Intent(this, OrderHistoryClientActivity::class.java)
             startActivity(intent)
             finish()
         }

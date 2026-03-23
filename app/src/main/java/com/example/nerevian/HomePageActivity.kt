@@ -27,19 +27,22 @@ class HomePageActivity : AppCompatActivity() {
     private fun setupNavigation() {
         val navHome = findViewById<ImageView>(R.id.nav_home)
         val navHistory = findViewById<ImageView>(R.id.nav_history)
-        val navGame = findViewById<ImageView>(R.id.nav_game)
         val navProfile = findViewById<ImageView>(R.id.nav_profile)
 
         navHome.setOnClickListener {
-            // Already here, do nothing
+            // Already here
+        }
+
+        navHistory.setOnClickListener {
+            val intent = Intent(this, OrderHistory::class.java)
+            startActivity(intent)
+            finish()
         }
 
         navProfile.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
-            finish() // Optional: finish current activity if you don't want to keep it in stack
+            finish()
         }
-
-        // Add history and game navigation if needed
     }
 }

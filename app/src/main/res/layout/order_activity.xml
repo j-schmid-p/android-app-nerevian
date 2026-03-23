@@ -1,6 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/beigeBackground"
+    tools:context=".OrderHistory">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="serif"
+        android:text="Order History"
+        android:textColor="@color/bottomNavBg"
+        android:textSize="36sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+        <LinearLayout
+            android:id="@+id/order_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp">
+
+            <!-- Order ACCEPTED with Expandable Detail -->
+            <LinearLayout
+                android:id="@+id/order_accepted_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/order_item_bg"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/order_accepted_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Order #9827483974"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/status_accepted_bg"
+                        android:text="ACCEPTED"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Expandable Section for Accepted -->
+                <LinearLayout
+                    android:id="@+id/order_detail_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/aquaMarin"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2"
+                        android:padding="16dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Incoterm:" android:textColor="@color/bottomNavBg" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:padding="8dp" android:text="CFR" android:textColor="@color/black" android:layout_marginTop="4dp" android:layout_marginEnd="8dp"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cargo type:" android:textColor="@color/bottomNavBg" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:padding="8dp" android:text="Electronics" android:textColor="@color/black" android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+                    </GridLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="16dp"
+                        android:orientation="horizontal">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Japan" android:textColor="@color/black" />
+                        <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/bottomNavBg" android:layout_marginHorizontal="8dp" />
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions" app:tint="@color/regularBlue" />
+                        <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/bottomNavBg" android:layout_marginHorizontal="8dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Spain" android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="45dp" android:orientation="horizontal">
+                        <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/button_see_info_bg" android:gravity="center" android:text="SEE INFO" android:textColor="@color/white" android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/btn_track"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_track_bg"
+                            android:gravity="center"
+                            android:text="TRACK"
+                            android:textColor="@color/white"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Order PENDING with Expandable Detail -->
+            <LinearLayout
+                android:id="@+id/order_pending_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/order_item_bg"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/order_pending_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Order #9827483981"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                        <ImageView android:layout_width="30dp" android:layout_height="30dp" android:layout_marginEnd="8dp" android:src="@android:drawable/stat_notify_error" app:tint="@color/alertRed" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_pending_bg" android:text="PENDING" android:textColor="@color/white" android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Expandable Section for Pending -->
+                <LinearLayout
+                    android:id="@+id/order_pending_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/aquaMarin"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="20dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@android:drawable/stat_sys_warning"
+                            app:tint="@color/bottomNavBg" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Please review the offer to accept or reject it"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/btn_see_offer"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_see_offer_bg"
+                        android:gravity="center"
+                        android:text="SEE OFFER"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Order REJECTED -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/order_item_bg"
+                android:paddingHorizontal="20dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483976" android:textColor="@color/white" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_rejected_bg" android:text="REJECTED" android:textColor="@color/white" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Order FINISHED -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/order_item_bg"
+                android:paddingHorizontal="20dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483977" android:textColor="@color/white" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_finished_bg" android:text="FINISHED" android:textColor="@color/regularBlue" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/bottomNavBg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <ImageView android:id="@+id/nav_home" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/homepage_icon" app:tint="@color/white" />
+        <ImageView android:id="@+id/nav_history" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/history_icon" app:tint="@color/white" />
+        <ImageView android:id="@+id/nav_game" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/ic_game_placeholder" app:tint="@color/white" />
+        <ImageView android:id="@+id/nav_profile" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/profile_icon" app:tint="@color/white" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

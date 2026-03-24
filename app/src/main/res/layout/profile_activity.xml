@@ -185,45 +185,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:backgroundTint="@color/pinkActionButton"
-        android:text="EDIT"
+        android:text="@string/edit"
         android:textColor="@color/white"
-        app:cornerRadius="20dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Rounded"
         app:layout_constraintEnd_toEndOf="@+id/personal_info_card"
         app:layout_constraintTop_toBottomOf="@+id/personal_info_card" />
 
-    <!-- Bottom Navigation -->
-    <LinearLayout
-        android:id="@+id/bottom_nav"
+    <include
+        layout="@layout/common_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#0A3A40"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/nav_home"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/homepage_icon"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:id="@+id/nav_history"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/history_icon"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:id="@+id/nav_profile"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/profile_icon"
-            app:tint="@color/white" />
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

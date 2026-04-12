@@ -11,16 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
-import com.example.nerevian.client.HomePageClientActivity
+import com.example.nerevian.client.ClientHomeFragment
+import com.example.nerevian.utils.SessionManager
 
 class ProfileActivity : AppCompatActivity() {
 
-    private lateinit var etName: EditText
-    private lateinit var etLastName: EditText
-    private lateinit var etBirthdate: EditText
+    private lateinit var nameTxt: EditText
+    private lateinit var lastNameTxt: EditText
+    private lateinit var birthdateTxt: EditText
     private lateinit var etId: EditText
     private lateinit var btnEditSave: Button
-
     private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +34,11 @@ class ProfileActivity : AppCompatActivity() {
             insets
         }
 
-        etName = findViewById(R.id.et_name)
-        etLastName = findViewById(R.id.et_last_name)
-        etBirthdate = findViewById(R.id.et_birthdate)
+        val session = SessionManager(this)
+
+        nameTxt = findViewById(R.id.et_name)
+        lastNameTxt = findViewById(R.id.et_last_name)
+        birthdateTxt = findViewById(R.id.et_birthdate)
         etId = findViewById(R.id.et_id)
         btnEditSave = findViewById(R.id.btn_edit_save)
 
@@ -45,33 +47,16 @@ class ProfileActivity : AppCompatActivity() {
                 toggleEditMode(false)
             } else {
                 toggleEditMode(true)
-                etName.requestFocus()
-                etName.setSelection(etName.text.length)
-                showKeyboard(etName)
+                nameTxt.requestFocus()
+                nameTxt.setSelection(nameTxt.text.length)
+                showKeyboard(nameTxt)
             }
-        }
-
-        setupNavigation()
-    }
-
-    private fun setupNavigation() {
-        val navHome = findViewById<ImageView>(R.id.nav_home)
-        val navProfile = findViewById<ImageView>(R.id.nav_profile)
-
-        navHome.setOnClickListener {
-            val intent = Intent(this, HomePageClientActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        navProfile.setOnClickListener {
-            // Already here
         }
     }
 
     private fun toggleEditMode(enable: Boolean) {
         isEditMode = enable
-        val fields = listOf(etName, etLastName, etBirthdate, etId)
+        val fields = listOf(nameTxt, lastNameTxt, birthdateTxt, etId)
         fields.forEach { it.isEnabled = enable }
         if (enable) {
             btnEditSave.text = "SAVE CHANGES"

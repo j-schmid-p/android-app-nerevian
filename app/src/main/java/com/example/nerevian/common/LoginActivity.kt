@@ -5,16 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.util.Consumer
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
-import com.example.nerevian.agent.HomePageAgentActivity
-import com.example.nerevian.client.HomePageClientActivity
+import com.example.nerevian.agent.AgentHomeFragment
+import com.example.nerevian.client.ClientHomeFragment
 import com.example.nerevian.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +25,8 @@ class LoginActivity : AppCompatActivity() {
     private val apiService = ApiService()
     private val PREFERENCE_NAME = "session"
     private lateinit var loginBtn: Button
+    private val ROL_CLIENT = 1
+    private val ROL_AGENT = 3
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        val loginBtn = findViewById<Button>(R.id.loginButton)
+        loginBtn = findViewById<Button>(R.id.loginButton)
 
         checkSession()
 
@@ -49,23 +49,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkSession() {
         val preferences = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-        val savedUserType = preferences.getInt("user_type", -1)
+        val savedRolId = preferences.getInt("rol_id", -1)
         val savedToken = preferences.getString("token", null)
 
-        if (savedUserType != -1 && savedToken != null)
-        {
-            goToUserActivity(savedUserType)
-            return
-        }
+        if (savedRolId != -1 && savedToken != null) { goToUserActivity(savedRolId) }
     }
 
     private fun validateInputs () {
-        val emailTxt = findViewById<EditText>(R.id.emailInput)
-        val passwordTxt = findViewById<EditText>(R.id.passwordInput)
-
-        val email = emailTxt.text.toString().trim()
-        val password = passwordTxt.text.toString().trim()
-
+        val email = findViewById<EditText>(R.id.emailInput).text.toString().trim()
+        val password = findViewById<EditText>(R.id.passwordInput).text.toString().trim()
 
         if (password.isEmpty() || email.isEmpty()){
             Toast.makeText(this, "Please enter both your email and password",
@@ -79,46 +71,47 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun callAPI(email: String, password: String){
+    private fun callAPI(email: String, password: String) {
         loginBtn.isEnabled = false
 
         CoroutineScope(Dispatchers.IO).launch {
-            val result = apiService.login(email, password)
+            val loginResult = apiService.login(email, password)
 
-            withContext(Dispatchers.Main){
-                loginBtn.isEnabled = true
-
-                if (result == null){
-                    Toast.makeText(this@LoginActivity, "Connection error",
-                        Toast.LENGTH_SHORT).show()
-
-                } else if (!result.optBoolean("success", false)){
-                    Toast.makeText(this@LoginActivity, result.optString(
-                        "message", "Invalid credentials"),
-                        Toast.LENGTH_SHORT).show()
-
-                } else {
-                    //TODO mirar si "rol" es correcte
-                    val userRole = result.getInt("rol_id")
-                    val token = result.getString("token")
-
-                    getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit()
-                        .putInt("rol_id", userRole)
-                        .putString("token", token)
-                        .apply()
-
-                    goToUserActivity(userRole)
+            if (loginResult == null || !loginResult.optBoolean("success", false)) {
+                withContext(Dispatchers.Main) {
+                    loginBtn.isEnabled = true
+                    val msg = loginResult?.optString("message", "Invalid credentials") ?: "Connection error"
+                    Toast.makeText(this@LoginActivity, msg, Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                val token = loginResult.getString("token")
+                val meResult = apiService.getMe(token)
 
+                withContext(Dispatchers.Main) {
+                    loginBtn.isEnabled = true
+                    if (meResult == null) {
+                        Toast.makeText(this@LoginActivity, "Could not load user data", Toast.LENGTH_SHORT).show()
+                    } else {
+                        getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit()
+                            .putString("token", token)
+                            .putInt("rol_id", meResult.getInt("rol_id"))
+                            .putInt("user_id", meResult.getInt("id"))
+                            .putString("nom", meResult.optString("nom"))
+                            .putString("cognoms", meResult.optString("cognoms"))
+                            .putString("correu", meResult.optString("correu"))
+                            .apply()
+
+                        goToUserActivity(meResult.getInt("rol_id"))
+                    }
+                }
             }
         }
     }
 
     private fun goToUserActivity(role : Int) {
-
         val intent = when (role) {
-            1 -> Intent(this, HomePageClientActivity::class.java)
-            3 -> Intent(this, HomePageAgentActivity::class.java)
+            ROL_CLIENT -> Intent(this, ClientHomeFragment::class.java)
+            ROL_AGENT -> Intent(this, AgentHomeFragment::class.java)
 
             else -> {
                 getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
@@ -130,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

@@ -13,11 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:fontFamily="serif"
         android:text="Order History"
         android:textColor="@color/darkBlueButton"
         android:textSize="36sp"
-        android:textStyle="italic|bold"
+        android:fontFamily="@font/jost_blackitalic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,21 +42,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/order_item_bg"
+                android:background="@drawable/ordernum_darkblue_rounded"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/order_accepted_header"
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:paddingHorizontal="20dp">
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Order #9827483974"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textColor="@color/beigeBackground"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/jost_black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -65,9 +67,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/status_accepted_bg"
+                        android:background="@drawable/status_accepted_green"
                         android:text="ACCEPTED"
-                        android:textColor="@color/white"
+                        android:textColor="@color/beigeBackground"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -90,11 +92,11 @@
                         android:padding="16dp">
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Incoterm:" android:textColor="@color/darkBlueButton" android:textSize="12sp" android:textStyle="bold" />
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:padding="8dp" android:text="CFR" android:textColor="@color/black" android:layout_marginTop="4dp" android:layout_marginEnd="8dp"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/beige_rounded" android:padding="8dp" android:text="CFR" android:textColor="@color/darkestBlueMainText" android:layout_marginTop="4dp" android:layout_marginEnd="8dp"/>
                         </LinearLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cargo type:" android:textColor="@color/darkBlueButton" android:textSize="12sp" android:textStyle="bold" />
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:padding="8dp" android:text="Electronics" android:textColor="@color/black" android:layout_marginTop="4dp"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/beige_rounded" android:padding="8dp" android:text="Electronics" android:textColor="@color/darkestBlueMainText" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </GridLayout>
 
@@ -104,24 +106,24 @@
                         android:gravity="center"
                         android:paddingBottom="16dp"
                         android:orientation="horizontal">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Japan" android:textColor="@color/black" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/beige_rounded" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Japan" android:textColor="@color/darkestBlueMainText" />
                         <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/darkBlueButton" android:layout_marginHorizontal="8dp" />
                         <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions" app:tint="@color/regularBlueButton" />
                         <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/darkBlueButton" android:layout_marginHorizontal="8dp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Spain" android:textColor="@color/black" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/beige_rounded" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Spain" android:textColor="@color/darkestBlueMainText" />
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="45dp" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/button_see_info_bg" android:gravity="center" android:text="SEE INFO" android:textColor="@color/white" android:textStyle="bold" />
+                        <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/btn_blue_see_info" android:gravity="center" android:text="SEE INFO" android:textColor="@color/beigeBackground" android:textStyle="bold" />
                         <TextView
                             android:id="@+id/btn_track"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="@drawable/button_track_bg"
+                            android:background="@drawable/btn_red_track"
                             android:gravity="center"
                             android:text="TRACK"
-                            android:textColor="@color/white"
+                            android:textColor="@color/beigeBackground"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -133,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/order_item_bg"
+                android:background="@drawable/ordernum_darkblue_rounded"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -146,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Order #9827483981"
-                        android:textColor="@color/white"
+                        android:textColor="@color/beigeBackground"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -161,7 +163,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
                         <ImageView android:layout_width="30dp" android:layout_height="30dp" android:layout_marginEnd="8dp" android:src="@android:drawable/stat_notify_error" app:tint="@color/alertRed" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_pending_bg" android:text="PENDING" android:textColor="@color/white" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_pending_yellow" android:text="PENDING" android:textColor="@color/beigeBackground" android:textStyle="bold" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -193,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:text="Please review the offer to accept or reject it"
-                            android:textColor="@color/black"
+                            android:textColor="@color/darkestBlueMainText"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -202,10 +204,10 @@
                         android:id="@+id/btn_see_offer"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="@drawable/button_see_offer_bg"
+                        android:background="@drawable/btn_red_rounded"
                         android:gravity="center"
                         android:text="SEE OFFER"
-                        android:textColor="@color/white"
+                        android:textColor="@color/beigeBackground"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -215,39 +217,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/order_item_bg"
+                android:background="@drawable/ordernum_darkblue_rounded"
                 android:paddingHorizontal="20dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483976" android:textColor="@color/white" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_rejected_bg" android:text="REJECTED" android:textColor="@color/white" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483976" android:textColor="@color/beigeBackground" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_rejected_gray" android:text="REJECTED" android:textColor="@color/beigeBackground" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Order FINISHED -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/order_item_bg"
+                android:background="@drawable/ordernum_darkblue_rounded"
                 android:paddingHorizontal="20dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483977" android:textColor="@color/white" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_finished_bg" android:text="FINISHED" android:textColor="@color/regularBlueTitle" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483977" android:textColor="@color/beigeBackground" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_finished_white" android:text="FINISHED" android:textColor="@color/regularBlueTitle" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation -->
-    <LinearLayout
-        android:id="@+id/bottom_nav"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        app:itemIconSize="40dp"
+        app:itemIconTint="@color/beigeBackground"
+        app:labelVisibilityMode="unlabeled"
         android:background="@color/darkBlueButton"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <ImageView android:id="@+id/nav_home" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/homepage_icon" app:tint="@color/white" />
-        <ImageView android:id="@+id/nav_history" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/history_icon" app:tint="@color/white" />
-        <ImageView android:id="@+id/nav_game" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/ic_game_placeholder" app:tint="@color/white" />
-        <ImageView android:id="@+id/nav_profile" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:src="@drawable/profile_icon" app:tint="@color/white" />
-    </LinearLayout>
+        app:menu="@menu/nav_bar_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

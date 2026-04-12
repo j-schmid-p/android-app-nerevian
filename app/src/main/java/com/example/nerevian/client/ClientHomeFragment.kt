@@ -10,11 +10,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.common.ProfileActivity
 import com.example.nerevian.R
 
-class HomePageClientActivity : AppCompatActivity() {
+class ClientHomeFragment : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home_page_activity)
+        setContentView(R.layout.client_home_fragment)
 
         val mainView = findViewById<View>(R.id.main)
         ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->

@@ -12,8 +12,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.common.ProfileActivity
 import com.example.nerevian.R
+import com.example.nerevian.common.BaseHistoryActivity
+import com.example.nerevian.utils.NavigationBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class OrderHistoryClientActivity : AppCompatActivity() {
+class OrderHistoryClientActivity : BaseHistoryActivity() {
 
     private var isAcceptedExpanded = false
     private var isPendingExpanded = false
@@ -29,27 +32,29 @@ class OrderHistoryClientActivity : AppCompatActivity() {
             insets
         }
 
+        setupSpecificLogic()
+    }
+
+    override fun setupSpecificLogic() {
         setupExpandableOrders()
         setupNavigation()
     }
 
     private fun setupExpandableOrders() {
-        // Accepted Order
         val acceptedHeader = findViewById<View>(R.id.order_accepted_header)
         val acceptedDetail = findViewById<LinearLayout>(R.id.order_detail_view)
         val btnTrack = findViewById<TextView>(R.id.btn_track)
 
         acceptedHeader.setOnClickListener {
-            if (isAcceptedExpanded) collapse(acceptedDetail) else expand(acceptedDetail)
+            if (isAcceptedExpanded) { collapse(acceptedDetail) }
+            else { expand(acceptedDetail) }
             isAcceptedExpanded = !isAcceptedExpanded
         }
 
         btnTrack.setOnClickListener {
-            val intent = Intent(this, TrackerActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, TrackerActivity::class.java))
         }
 
-        // Pending Order
         val pendingHeader = findViewById<View>(R.id.order_pending_header)
         val pendingDetail = findViewById<LinearLayout>(R.id.order_pending_detail)
         pendingHeader.setOnClickListener {
@@ -81,17 +86,7 @@ class OrderHistoryClientActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val navHome = findViewById<ImageView>(R.id.nav_home)
-        val navHistory = findViewById<ImageView>(R.id.nav_history)
-        val navProfile = findViewById<ImageView>(R.id.nav_profile)
-
-        navHome.setOnClickListener {
-            startActivity(Intent(this, HomePageClientActivity::class.java))
-            finish()
-        }
-        navProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
-            finish()
-        }
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
     }
 }

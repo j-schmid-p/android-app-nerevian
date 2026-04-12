@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Nerevian</string>
     <string name="login">LOGIN</string>
+    <string name="home">Home</string>
+    <string name="orders">Orders</string>
+    <string name="game">Game</string>
+    <string name="profile">Profile</string>
+    <string name="history">history</string>
+    <string name="personal_identification_document">Personal identification document</string>
 </resources>

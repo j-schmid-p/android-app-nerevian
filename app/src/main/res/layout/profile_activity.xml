@@ -8,14 +8,30 @@
     android:background="@color/beigeBackground"
     tools:context=".common.ProfileActivity">
 
-    <!-- Header Section -->
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/profilepicture_icon"
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/regularBlueTitle"
+        android:fontFamily="@font/jost_semibolditalic"
+        android:text="LOG OUT"
+        android:textColor="@color/beigeBackground"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profile_name_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="45dp"
+        android:fontFamily="@font/jost_bold"
+        android:text="Hello,"
+        android:textColor="@color/darkestBlueMainText"
+        android:textSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,34 +39,33 @@
         android:id="@+id/profile_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="99dp"
+        android:fontFamily="@font/jost_bolditalic"
+        android:paddingBottom="20dp"
         android:text="Jane Doe"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        android:textColor="@color/regularBlueTitle"
+        android:textSize="40sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Personal Information Card -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/personal_info_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/profile_card_bg"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/square_lightblue_rounded"
         android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Card Header -->
         <View
             android:id="@+id/card_header_bg"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:background="@drawable/profile_label_bg"
+            android:layout_height="43dp"
+            android:background="@drawable/darkblue_rounded"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -64,20 +79,19 @@
             app:layout_constraintBottom_toBottomOf="@+id/card_header_bg"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/card_header_bg"
-            app:tint="@color/white" />
+            app:tint="@color/beigeBackground" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Personal Information"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textColor="@color/beigeBackground"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/card_header_bg"
             app:layout_constraintStart_toEndOf="@+id/info_icon"
             app:layout_constraintTop_toTopOf="@+id/card_header_bg" />
 
-        <!-- Fields Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,16 +99,14 @@
             android:padding="16dp"
             app:layout_constraintTop_toBottomOf="@+id/card_header_bg">
 
-            <!-- Name Field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/profile_label_bg"
-                android:paddingHorizontal="12dp"
+                android:paddingHorizontal="0dp"
                 android:paddingVertical="2dp"
                 android:text="Name"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textColor="@color/darkBlueTitle"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/et_name"
@@ -104,20 +116,18 @@
                 android:enabled="false"
                 android:paddingHorizontal="12dp"
                 android:text="Jane"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textColor="@color/darkestBlueMainText"
+                android:textSize="23sp" />
 
-            <!-- Last Name Field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/profile_label_bg"
-                android:paddingHorizontal="12dp"
+                android:paddingHorizontal="0dp"
                 android:paddingVertical="2dp"
                 android:text="Last name"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textColor="@color/darkBlueTitle"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/et_last_name"
@@ -127,20 +137,18 @@
                 android:enabled="false"
                 android:paddingHorizontal="12dp"
                 android:text="Doe"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textColor="@color/darkestBlueMainText"
+                android:textSize="23sp" />
 
-            <!-- Birthdate Field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/profile_label_bg"
-                android:paddingHorizontal="12dp"
+                android:paddingHorizontal="0dp"
                 android:paddingVertical="2dp"
                 android:text="Birthdate"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textColor="@color/darkBlueTitle"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/et_birthdate"
@@ -150,20 +158,19 @@
                 android:enabled="false"
                 android:paddingHorizontal="12dp"
                 android:text="01-01-1999"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textColor="@color/darkestBlueMainText"
+                android:textSize="23sp" />
 
-            <!-- ID Field -->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/profile_label_bg"
-                android:paddingHorizontal="12dp"
+                android:paddingHorizontal="0dp"
                 android:paddingVertical="2dp"
-                android:text="ID"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:text="@string/personal_identification_document"
+                android:textColor="@color/darkBlueTitle"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/et_id"
@@ -173,57 +180,33 @@
                 android:enabled="false"
                 android:paddingHorizontal="12dp"
                 android:text="0298398.jpg"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textColor="@color/darkestBlueMainText"
+                android:textSize="23sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Edit Button -->
-    <Button
+    <android.widget.Button
         android:id="@+id/btn_edit_save"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_marginTop="12dp"
-        android:backgroundTint="@color/pinkActionButton"
+        android:background="@drawable/btn_red_rounded"
         android:text="EDIT"
-        android:textColor="@color/white"
-        app:cornerRadius="20dp"
+        android:fontFamily="@font/jost_black"
+        android:textColor="@color/beigeBackground"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/personal_info_card"
         app:layout_constraintTop_toBottomOf="@+id/personal_info_card" />
 
-    <!-- Bottom Navigation -->
-    <LinearLayout
-        android:id="@+id/bottom_nav"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#0A3A40"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/nav_home"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/homepage_icon"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:id="@+id/nav_history"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/history_icon"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:id="@+id/nav_profile"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/profile_icon"
-            app:tint="@color/white" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/darkBlueButton"
+        app:itemIconTint="@color/beigeBackground"
+        app:itemIconSize="40dp"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/nav_bar_bottom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

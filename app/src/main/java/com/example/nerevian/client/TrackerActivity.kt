@@ -32,7 +32,7 @@ class TrackerActivity : AppCompatActivity() {
         val navProfile = findViewById<ImageView>(R.id.nav_profile)
 
         navHome.setOnClickListener {
-            startActivity(Intent(this, HomePageClientActivity::class.java))
+            startActivity(Intent(this, ClientHomeFragment::class.java))
             finish()
         }
 

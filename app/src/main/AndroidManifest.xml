@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nerevian">
+        <activity
+            android:name=".client.GameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".common.HomePageActivity"
+            android:exported="false" />
         <activity
             android:name=".client.OrderDocumentsActivity"
             android:exported="false" />
@@ -24,10 +32,10 @@
             android:name=".agent.OrderHistoryAgentActivity"
             android:exported="false" />
         <activity
-            android:name=".agent.HomePageAgentActivity"
+            android:name=".agent.AgentHomeFragment"
             android:exported="false" />
         <activity
-            android:name=".client.HomePageClientActivity"
+            android:name=".client.ClientHomeFragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,5 +57,4 @@
             android:exported="true" />
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

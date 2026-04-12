@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="Verified at port of origin"
-                    android:textColor="@color/grayText"
+                    android:textColor="@color/darkestBlueMainText"
                     android:textSize="18sp"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="Loaded on freight"
-                    android:textColor="@color/grayText"
+                    android:textColor="@color/darkestBlueMainText"
                     android:textSize="18sp"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="Arrived at port of\ndestination"
-                    android:textColor="@color/grayText"
+                    android:textColor="@color/darkestBlueMainText"
                     android:textSize="18sp"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="Awaiting customs"
-                    android:textColor="@color/grayText"
+                    android:textColor="@color/darkestBlueMainText"
                     android:textSize="18sp"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -168,7 +168,7 @@
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/bottomNavBg"
+        android:background="@color/darkBlueButton"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">

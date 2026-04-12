@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jhon Doe"
-                android:textColor="@color/regularBlue"
+                android:textColor="@color/regularBlueTitle"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your fleet is currently on schedule"
-                android:textColor="@color/grayText"
+                android:textColor="@color/darkestBlueMainText"
                 android:textSize="14sp" />
 
             <!-- Stats Cards -->
@@ -70,7 +70,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@android:drawable/ic_menu_directions"
-                            app:tint="@color/regularBlue" />
+                            app:tint="@color/lightestBlueBackground" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="Current Shipment"
-                android:textColor="@color/brownText"
+                android:textColor="@color/darkestBlueMainText"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -191,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="Recent Activity"
-                android:textColor="@color/brownText"
+                android:textColor="@color/darkestBlueMainText"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -230,7 +230,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Port of Valencia, NL"
-                        android:textColor="@color/grayText"
+                        android:textColor="@color/darkestBlueMainText"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -238,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2h ago"
-                    android:textColor="@color/grayText"
+                    android:textColor="@color/darkestBlueMainText"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -276,7 +276,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Port of Valencia, NL"
-                        android:textColor="@color/grayText"
+                        android:textColor="@color/darkestBlueMainText"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -284,7 +284,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5h ago"
-                    android:textColor="@color/grayText"
+                    android:textColor="@color/darkestBlueMainText"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -296,7 +296,7 @@
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/bottomNavBg"
+        android:background="@color/darkBlueButton"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">

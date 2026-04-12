@@ -15,7 +15,7 @@
         android:layout_marginTop="60dp"
         android:fontFamily="serif"
         android:text="Order History"
-        android:textColor="@color/bottomNavBg"
+        android:textColor="@color/darkBlueButton"
         android:textSize="36sp"
         android:textStyle="italic|bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
                     android:id="@+id/order_detail_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/aquaMarin"
+                    android:background="@color/lightestBlueBackground"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -89,11 +89,11 @@
                         android:columnCount="2"
                         android:padding="16dp">
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Incoterm:" android:textColor="@color/bottomNavBg" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Incoterm:" android:textColor="@color/darkBlueButton" android:textSize="12sp" android:textStyle="bold" />
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:padding="8dp" android:text="CFR" android:textColor="@color/black" android:layout_marginTop="4dp" android:layout_marginEnd="8dp"/>
                         </LinearLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cargo type:" android:textColor="@color/bottomNavBg" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cargo type:" android:textColor="@color/darkBlueButton" android:textSize="12sp" android:textStyle="bold" />
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:padding="8dp" android:text="Electronics" android:textColor="@color/black" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </GridLayout>
@@ -105,9 +105,9 @@
                         android:paddingBottom="16dp"
                         android:orientation="horizontal">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Japan" android:textColor="@color/black" />
-                        <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/bottomNavBg" android:layout_marginHorizontal="8dp" />
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions" app:tint="@color/regularBlue" />
-                        <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/bottomNavBg" android:layout_marginHorizontal="8dp" />
+                        <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/darkBlueButton" android:layout_marginHorizontal="8dp" />
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions" app:tint="@color/regularBlueButton" />
+                        <View android:layout_width="40dp" android:layout_height="1dp" android:background="@color/darkBlueButton" android:layout_marginHorizontal="8dp" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/detail_bubble_bg" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:text="Spain" android:textColor="@color/black" />
                     </LinearLayout>
 
@@ -170,7 +170,8 @@
                     android:id="@+id/order_pending_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/aquaMarin"
+                    android:background="@color/lightestBlueBackground
+"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -185,7 +186,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@android:drawable/stat_sys_warning"
-                            app:tint="@color/bottomNavBg" />
+                            app:tint="@color/darkBlueButton" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -228,7 +229,7 @@
                 android:background="@drawable/order_item_bg"
                 android:paddingHorizontal="20dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order #9827483977" android:textColor="@color/white" android:textSize="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_finished_bg" android:text="FINISHED" android:textColor="@color/regularBlue" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/status_finished_bg" android:text="FINISHED" android:textColor="@color/regularBlueTitle" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
@@ -239,7 +240,7 @@
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/bottomNavBg"
+        android:background="@color/darkBlueButton"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">

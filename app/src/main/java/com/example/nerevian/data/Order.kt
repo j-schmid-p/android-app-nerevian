@@ -1,5 +1,13 @@
-/*package com.example.nerevian.data
+package com.example.nerevian.data
 
 data class Order(
-    //TODO crec que la API no envia el num de order
-)*/
+    val orderNum: String,
+    val status: String,
+    val incoterm: String,
+    val cargo: String,
+    val origin: String,
+    val destination: String,
+    val customer: String
+
+
+)

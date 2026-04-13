@@ -18,7 +18,13 @@
             android:exported="false" />
         <activity
             android:name=".common.HomePageActivity"
-            android:exported="false" />
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".client.OrderDocumentsActivity"
             android:exported="false" />
@@ -33,28 +39,32 @@
             android:exported="false" />
         <activity
             android:name=".agent.AgentHomeFragment"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".client.ClientHomeFragment"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
         <activity
             android:name=".common.LoginActivity"
-            android:exported="true" />
+            android:exported="true">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
         <activity
             android:name=".common.ProfileActivity"
-            android:exported="true" />
+            android:exported="false">
+        </activity>
         <activity
             android:name=".client.OrderHistoryClientActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".client.TrackerActivity"
-            android:exported="true" />
+            android:exported="false" />
     </application>
-
 </manifest>

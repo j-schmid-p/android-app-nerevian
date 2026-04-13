@@ -11,9 +11,12 @@ class ApiService {
 
     private val BASE_URL = "http://127.0.0.1:8000/api"
 
+    private val TEST_URL = "https://webhook.site/340d8a1d-343f-48f8-8c77-db3624ec5bf4"
+
     fun login(email: String, password: String) : JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/auth/login", "POST", null)
+            //val connection = openConnection("$BASE_URL/auth/login", "POST", null)
+            val connection = openConnection(TEST_URL, "POST", null)
 
             val body = JSONObject().apply {
                 put("correu", email)
@@ -27,21 +30,24 @@ class ApiService {
 
     fun getMe(token: String): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/auth/me", "GET", token)
+          //  val connection = openConnection("$BASE_URL/auth/me", "GET", token)
+            val connection = openConnection(TEST_URL, "GET", token)
             readResponse(connection)
         } catch (e: Exception) { null }
     }
 
     fun getProfile(token: String): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/profile", "GET", token)
+            //   val connection = openConnection("$BASE_URL/profile", "GET", token)
+            val connection = openConnection(TEST_URL, "GET", token)
             readResponse(connection)
         } catch (e: Exception) { null }
     }
 
     fun updateProfile(token: String, name: String, lastName: String, email: String): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/profile", "PUT", token)
+           // val connection = openConnection("$BASE_URL/profile", "PUT", token)
+            val connection = openConnection(TEST_URL, "PUT", token)
 
             val body = JSONObject().apply {
                 put("nom", name)
@@ -95,8 +101,4 @@ class ApiService {
 
         return JSONObject(response)
     }
-
-    data class Order(
-
-    )
 }

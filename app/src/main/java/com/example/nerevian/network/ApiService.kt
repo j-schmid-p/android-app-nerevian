@@ -88,8 +88,8 @@ class ApiService {
         connection.setRequestProperty("Content-Type", "application/json")
         if (token != null) { connection.setRequestProperty("Authorization", "Bearer $token") }
         if (method == "POST" || method == "PUT"){ connection.doOutput = true }
-        connection.connectTimeout = 5000
-        connection.readTimeout = 5000
+        connection.connectTimeout = 15000
+        connection.readTimeout = 15000
 
         return connection
     }

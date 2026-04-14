@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val loginResult = apiService.login(email, password)
 
-            if (loginResult == null || !loginResult.optBoolean("success", false)) {
+            if (loginResult == null || !loginResult.has("token")) {
                 withContext(Dispatchers.Main) {
                     loginBtn.isEnabled = true
                     val msg = loginResult?.optString("message", "Invalid credentials") ?: "Connection error"
@@ -92,6 +92,8 @@ class LoginActivity : AppCompatActivity() {
                     if (meResult == null) {
                         Toast.makeText(this@LoginActivity, "Could not load user data", Toast.LENGTH_SHORT).show()
                     } else {
+                        val user = meResult.getJSONObject("user")
+
                         getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit()
                             .putString("token", token)
                             .putInt("rol_id", meResult.getInt("rol_id"))
@@ -109,24 +111,21 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToUserActivity(role : Int) {
-
-         /*val intent = when (role) {
-            ROL_CLIENT -> Intent(this, ClientHomeFragment::class.java)
-            ROL_AGENT -> Intent(this, AgentHomeFragment::class.java)
-
+        when (role) {
+            ROL_CLIENT, ROL_AGENT -> {
+                val intent = Intent(this, HomePageActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             else -> {
                 getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-                    .edit { clear() } //TODO mirar si aixo del clear esta be
+                    .edit { clear() }
+
                 Toast.makeText(this,
                     "You cannot login to this app with the user role you hold",
                     Toast.LENGTH_SHORT).show()
-                return
             }
-        }*/
+        }
 
-        val intent = Intent(this, HomePageActivity::class.java)
-
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

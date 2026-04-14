@@ -109,7 +109,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToUserActivity(role : Int) {
-        val intent = when (role) {
+
+         /*val intent = when (role) {
             ROL_CLIENT -> Intent(this, ClientHomeFragment::class.java)
             ROL_AGENT -> Intent(this, AgentHomeFragment::class.java)
 
@@ -121,7 +122,9 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT).show()
                 return
             }
-        }
+        }*/
+
+        val intent = Intent(this, HomePageActivity::class.java)
 
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

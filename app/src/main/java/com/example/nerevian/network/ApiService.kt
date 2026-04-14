@@ -1,6 +1,7 @@
 package com.example.nerevian.network
 
 import android.icu.util.Output
+import android.widget.Toast
 import com.google.api.Http
 import org.json.JSONObject
 import java.io.OutputStreamWriter
@@ -9,14 +10,22 @@ import java.net.URL
 
 class ApiService {
 
-    private val BASE_URL = "http://127.0.0.1:8000/api"
+    //IP local
+    //private val BASE_URL = "http://127.0.0.1:8000/api"
 
-    private val TEST_URL = "https://webhook.site/340d8a1d-343f-48f8-8c77-db3624ec5bf4"
+
+    //IP si es corre en emulador de android studio
+    //private val BASE_URL = "http://10.0.2.2:8000/api"
+
+
+    //IP si es corre amb movil endollat
+    // (canviar IP per la del PC que s'estigui fent servir)
+    private val BASE_URL = "http://192.168.1.48:8000/api"
+
 
     fun login(email: String, password: String) : JSONObject? {
         return try {
-            //val connection = openConnection("$BASE_URL/auth/login", "POST", null)
-            val connection = openConnection(TEST_URL, "POST", null)
+            val connection = openConnection("$BASE_URL/auth/login", "POST", null)
 
             val body = JSONObject().apply {
                 put("correu", email)
@@ -30,24 +39,21 @@ class ApiService {
 
     fun getMe(token: String): JSONObject? {
         return try {
-          //  val connection = openConnection("$BASE_URL/auth/me", "GET", token)
-            val connection = openConnection(TEST_URL, "GET", token)
+            val connection = openConnection("$BASE_URL/auth/me", "GET", token)
             readResponse(connection)
         } catch (e: Exception) { null }
     }
 
     fun getProfile(token: String): JSONObject? {
         return try {
-            //   val connection = openConnection("$BASE_URL/profile", "GET", token)
-            val connection = openConnection(TEST_URL, "GET", token)
+            val connection = openConnection("$BASE_URL/profile", "GET", token)
             readResponse(connection)
         } catch (e: Exception) { null }
     }
 
     fun updateProfile(token: String, name: String, lastName: String, email: String): JSONObject? {
         return try {
-           // val connection = openConnection("$BASE_URL/profile", "PUT", token)
-            val connection = openConnection(TEST_URL, "PUT", token)
+            val connection = openConnection("$BASE_URL/profile", "PUT", token)
 
             val body = JSONObject().apply {
                 put("nom", name)
@@ -82,8 +88,8 @@ class ApiService {
         connection.setRequestProperty("Content-Type", "application/json")
         if (token != null) { connection.setRequestProperty("Authorization", "Bearer $token") }
         if (method == "POST" || method == "PUT"){ connection.doOutput = true }
-        connection.connectTimeout = 1000
-        connection.readTimeout = 1000
+        connection.connectTimeout = 5000
+        connection.readTimeout = 5000
 
         return connection
     }

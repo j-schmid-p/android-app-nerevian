@@ -52,7 +52,9 @@ class LoginActivity : AppCompatActivity() {
         val savedRolId = preferences.getInt("rol_id", -1)
         val savedToken = preferences.getString("token", null)
 
-        if (savedRolId != -1 && savedToken != null) { goToUserActivity(savedRolId) }
+        if (savedRolId != -1 && savedToken != null) {
+            goToUserActivity(savedRolId)
+        }
     }
 
     private fun validateInputs () {
@@ -92,18 +94,23 @@ class LoginActivity : AppCompatActivity() {
                     if (meResult == null) {
                         Toast.makeText(this@LoginActivity, "Could not load user data", Toast.LENGTH_SHORT).show()
                     } else {
-                        val user = meResult.getJSONObject("user")
+                        try {
+                            val user = meResult.getJSONObject("user")
+                            val rolId = user.getString("rol_id").toInt()
 
-                        getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit()
-                            .putString("token", token)
-                            .putInt("rol_id", meResult.getInt("rol_id"))
-                            .putInt("user_id", meResult.getInt("id"))
-                            .putString("nom", meResult.optString("nom"))
-                            .putString("cognoms", meResult.optString("cognoms"))
-                            .putString("correu", meResult.optString("correu"))
-                            .apply()
+                            getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit()
+                                .putString("token", token)
+                                .putInt("rol_id", rolId)
+                                .putInt("id", user.getInt("id"))
+                                .putString("nom", user.optString("nom"))
+                                .putString("cognoms", user.optString("cognoms"))
+                                .putString("correu", user.optString("correu"))
+                                .apply()
 
-                        goToUserActivity(meResult.getInt("rol_id"))
+                            goToUserActivity(rolId)
+                        } catch (e: Exception) {
+                            Toast.makeText(this@LoginActivity, "Error parsing user data", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -111,22 +118,18 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToUserActivity(role : Int) {
-        when (role) {
-            ROL_CLIENT, ROL_AGENT -> {
-                val intent = Intent(this, HomePageActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            else -> {
-                getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-                    .edit { clear() }
+        if (role == ROL_CLIENT || role == ROL_AGENT) {
+            val intent = Intent(this, HomePageActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        } else {
+            getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+                .edit { clear() }
 
-                Toast.makeText(this,
-                    "You cannot login to this app with the user role you hold",
-                    Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(this,
+                "You cannot login to this app with the user role you hold",
+                Toast.LENGTH_SHORT).show()
         }
-
-        startActivity(intent)
-        finish()
     }
 }

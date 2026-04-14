@@ -7,4 +7,7 @@
     <string name="profile">Profile</string>
     <string name="history">history</string>
     <string name="personal_identification_document">Personal identification document</string>
+    <string name="hello">Hello,</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="order_number_placeholder">Order #%1$s</string>
 </resources>

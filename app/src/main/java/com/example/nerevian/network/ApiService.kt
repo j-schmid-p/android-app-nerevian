@@ -51,19 +51,33 @@ class ApiService {
         } catch (e: Exception) { null }
     }
 
-    fun updateProfile(token: String, name: String, lastName: String, email: String): JSONObject? {
+    fun getOrders(token: String): JSONObject? {
+        return try {
+            val connection = openConnection("$BASE_URL/orders", "GET", token)
+            readResponse(connection)
+        } catch (e: Exception) { null }
+    }
+
+    fun updateProfile(
+        token: String,
+        nom: String? = null,
+        cognoms: String? = null
+/* , birthdate: String? = null */
+    ): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/profile", "PUT", token)
 
             val body = JSONObject().apply {
-                put("nom", name)
-                put("cognoms", lastName)
-                put("correu", email)
+                if (nom != null) put("nom", nom)
+                if (cognoms != null) put("cognoms", cognoms)
+                // if (birthdate != null) put("data_naixement", birthdate)
             }
 
             writeBody(connection, body)
             readResponse(connection)
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null }
     }
 
     fun getOffers(token: String): JSONObject? {
@@ -102,9 +116,13 @@ class ApiService {
     }
 
     private fun readResponse(connection: HttpURLConnection): JSONObject? {
-        val response = connection.inputStream.bufferedReader().readText()
+        val stream = if (connection.responseCode in 200..299) {
+            connection.inputStream
+        } else { connection.errorStream }
+
+        val response = stream?.bufferedReader()?.readText() ?: ""
         connection.disconnect()
 
-        return JSONObject(response)
+        return if (response.isNotEmpty()) { JSONObject(response) } else { null }
     }
 }

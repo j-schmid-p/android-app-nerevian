@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
+import com.example.nerevian.common.BaseHistoryActivity
 import com.example.nerevian.common.ProfileActivity
 
 class TrackerActivity : AppCompatActivity() {
@@ -37,7 +38,7 @@ class TrackerActivity : AppCompatActivity() {
         }
 
         navHistory.setOnClickListener {
-            startActivity(Intent(this, OrderHistoryClientActivity::class.java))
+            startActivity(Intent(this, BaseHistoryActivity::class.java))
             finish()
         }
 

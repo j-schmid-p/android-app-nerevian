@@ -16,20 +16,20 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/regularBlueTitle"
         android:fontFamily="@font/jost_semibolditalic"
-        android:text="LOG OUT"
+        android:text="@string/log_out"
         android:textColor="@color/beigeBackground"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile_name_header"
+        android:id="@+id/hello_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="45dp"
         android:fontFamily="@font/jost_bold"
-        android:text="Hello,"
+        android:text="@string/hello"
         android:textColor="@color/darkestBlueMainText"
         android:textSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,8 +42,8 @@
         android:layout_marginStart="136dp"
         android:layout_marginTop="99dp"
         android:fontFamily="@font/jost_bolditalic"
-        android:paddingBottom="20dp"
-        android:text="Jane Doe"
+        android:padding="10dp"
+        android:text=" Jane Doe"
         android:textColor="@color/regularBlueTitle"
         android:textSize="40sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,6 +140,7 @@
                 android:textColor="@color/darkestBlueMainText"
                 android:textSize="23sp" />
 
+            <!--
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,6 +161,8 @@
                 android:text="01-01-1999"
                 android:textColor="@color/darkestBlueMainText"
                 android:textSize="23sp" />
+
+                -->
 
 
             <TextView
@@ -190,6 +193,7 @@
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginTop="12dp"
+        android:paddingHorizontal="5dp"
         android:background="@drawable/btn_red_rounded"
         android:text="EDIT"
         android:fontFamily="@font/jost_black"

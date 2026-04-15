@@ -12,8 +12,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.nerevian.common.ProfileActivity
 import com.example.nerevian.R
+import com.example.nerevian.utils.SessionManager
+import android.widget.TextView
 
 class ClientHomeFragment : Fragment() {
+
+    private lateinit var session: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,5 +32,11 @@ class ClientHomeFragment : Fragment() {
         // aquí va tot el que tenies al setupNavigation() anterior,
         // però ara la navegació la fa el BottomNavigation del HomePageActivity
         // així que per ara es deixa buit fins que afegeixis contingut
+
+
+        session = SessionManager(requireContext())
+
+        val welcomeName = view.findViewById<TextView>(R.id.welcome_name)
+        welcomeName.text = "${session.name} ${session.lastName}"
     }
 }

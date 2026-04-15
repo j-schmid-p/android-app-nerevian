@@ -7,6 +7,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
 
+import com.example.nerevian.utils.NavigationBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,5 +20,9 @@ class GameActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
+        navView.selectedItemId = R.id.nav_games
     }
 }

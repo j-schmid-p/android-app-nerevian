@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:scrollbars="none"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nav_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -29,9 +29,16 @@
 
     </ScrollView>
 
-    <include
-        android:id="@+id/nav_bar"
-        layout="@menu/nav_bar_bottom"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+
+        app:itemIconSize="32dp"
+        app:itemIconTint="@color/white"
+        app:labelVisibilityMode="unlabeled"
+        android:background="@color/darkBlueButton"
+        app:menu="@menu/nav_bar_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

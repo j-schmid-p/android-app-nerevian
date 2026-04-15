@@ -205,12 +205,12 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/darkBlueButton"
-        app:itemIconTint="@color/beigeBackground"
-        app:itemIconSize="40dp"
+        android:layout_height="70dp"
+        app:itemIconSize="32dp"
+        app:itemIconTint="@color/white"
         app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/nav_bar_bottom" />
+        android:background="@color/darkBlueButton"
+        app:menu="@menu/nav_bar_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

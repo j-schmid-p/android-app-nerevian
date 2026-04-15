@@ -18,6 +18,8 @@ import com.example.nerevian.common.BaseHistoryActivity
 import com.example.nerevian.common.ProfileActivity
 import com.example.nerevian.network.ApiService
 import com.example.nerevian.utils.SessionManager
+import com.example.nerevian.utils.NavigationBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +55,11 @@ class TrackerActivity : AppCompatActivity() {
 
         stepsContainer = findViewById(R.id.steps_container)
 
-        setupNavigation()
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
+        // No item is selected by default in Tracker as it's a detail view, 
+        // or you can select Home if you consider it part of Home flow.
+
         loadTracking()
     }
 
@@ -135,28 +141,6 @@ class TrackerActivity : AppCompatActivity() {
                 val arrowView = inflater.inflate(R.layout.item_tracking_arrow, stepsContainer, false)
                 stepsContainer.addView(arrowView)
             }
-        }
-    }
-
-
-    private fun setupNavigation() {
-        val navHome = findViewById<ImageView>(R.id.nav_home)
-        val navHistory = findViewById<ImageView>(R.id.nav_history)
-        val navProfile = findViewById<ImageView>(R.id.nav_profile)
-
-        navHome.setOnClickListener {
-            startActivity(Intent(this, HomePageActivity::class.java))
-            finish()
-        }
-
-        navHistory.setOnClickListener {
-            startActivity(Intent(this, BaseHistoryActivity::class.java))
-            finish()
-        }
-
-        navProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
-            finish()
         }
     }
 }

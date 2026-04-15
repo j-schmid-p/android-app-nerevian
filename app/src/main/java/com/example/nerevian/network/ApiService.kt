@@ -21,6 +21,7 @@ class ApiService {
     //IP si es corre amb movil endollat
     // (canviar IP per la del PC que s'estigui fent servir)
     private val BASE_URL = "http://192.168.1.48:8000/api"
+    private val BASE_URLL = "https://webhook.site/340d8a1d-343f-48f8-8c77-db3624ec5bf4"
 
 
     fun login(email: String, password: String) : JSONObject? {
@@ -53,14 +54,16 @@ class ApiService {
 
     fun getOrders(token: String): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/orders", "GET", token)
+           // val connection = openConnection("$BASE_URL/orders", "GET", token)
+            val connection = openConnection(BASE_URLL, "GET", token)
             readResponse(connection)
         } catch (e: Exception) { null }
     }
 
     fun getTracking(token: String, offerId: Int): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
+           // val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
+            val connection = openConnection(BASE_URLL, "GET", token)
             readResponse(connection)
         } catch (e: Exception) {
             null
@@ -74,7 +77,10 @@ class ApiService {
 /* , birthdate: String? = null */
     ): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/profile", "PUT", token)
+           //
+
+            val connection = openConnection(BASE_URLL, "PUT", token)
+            //val connection = openConnection("$BASE_URL/profile", "PUT", token)
 
             val body = JSONObject().apply {
                 if (nom != null) put("nom", nom)

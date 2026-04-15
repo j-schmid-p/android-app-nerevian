@@ -8,6 +8,7 @@ import android.media.RouteListingPreference
 import android.provider.ContactsContract
 import android.widget.ImageView
 import com.example.nerevian.client.GameActivity
+import com.example.nerevian.client.TrackerActivity
 import com.example.nerevian.common.BaseHistoryActivity
 import com.example.nerevian.common.HomePageActivity
 import com.example.nerevian.common.ProfileActivity
@@ -35,10 +36,16 @@ class NavigationBar (private val context: Context){
                 else -> null
             }
 
+            if (targetActivity == null && item.itemId == R.id.nav_home) {
+                 // Special case if HomePageActivity logic needs it, but it's handled by default usually.
+            }
+
             targetActivity?.let {
-                val intent = Intent(context, it)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                context.startActivity(intent)
+                if (context::class.java != it) {
+                    val intent = Intent(context, it)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    context.startActivity(intent)
+                }
             }
             true
         }

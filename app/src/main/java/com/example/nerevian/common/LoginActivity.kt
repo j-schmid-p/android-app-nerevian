@@ -11,8 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
-import com.example.nerevian.agent.AgentHomeFragment
-import com.example.nerevian.client.ClientHomeFragment
+
 import com.example.nerevian.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

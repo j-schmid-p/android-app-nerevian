@@ -36,10 +36,6 @@ class NavigationBar (private val context: Context){
                 else -> null
             }
 
-            if (targetActivity == null && item.itemId == R.id.nav_home) {
-                 // Special case if HomePageActivity logic needs it, but it's handled by default usually.
-            }
-
             targetActivity?.let {
                 if (context::class.java != it) {
                     val intent = Intent(context, it)
@@ -48,6 +44,12 @@ class NavigationBar (private val context: Context){
                 }
             }
             true
+        }
+
+        navView.setOnItemReselectedListener { item ->
+            if (item.itemId == R.id.nav_history) {
+                (context as? BaseHistoryActivity)?.refreshHistory()
+            }
         }
     }
 }

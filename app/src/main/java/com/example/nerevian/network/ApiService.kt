@@ -2,6 +2,8 @@ package com.example.nerevian.network
 
 import android.icu.util.Output
 import android.widget.Toast
+import com.example.nerevian.data.Offer
+import com.google.android.gms.common.api.Response
 import com.google.api.Http
 import org.json.JSONObject
 import java.io.OutputStreamWriter
@@ -54,16 +56,16 @@ class ApiService {
 
     fun getOrders(token: String): JSONObject? {
         return try {
-           // val connection = openConnection("$BASE_URL/orders", "GET", token)
-            val connection = openConnection(BASE_URLL, "GET", token)
+            val connection = openConnection("$BASE_URL/orders", "GET", token)
+            //val connection = openConnection(BASE_URLL, "GET", token)
             readResponse(connection)
         } catch (e: Exception) { null }
     }
 
     fun getTracking(token: String, offerId: Int): JSONObject? {
         return try {
-           // val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
-            val connection = openConnection(BASE_URLL, "GET", token)
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
+            //val connection = openConnection(BASE_URLL, "GET", token)
             readResponse(connection)
         } catch (e: Exception) {
             null
@@ -77,10 +79,8 @@ class ApiService {
 /* , birthdate: String? = null */
     ): JSONObject? {
         return try {
-           //
-
-            val connection = openConnection(BASE_URLL, "PUT", token)
-            //val connection = openConnection("$BASE_URL/profile", "PUT", token)
+             //val connection = openConnection(BASE_URLL, "PUT", token)
+            val connection = openConnection("$BASE_URL/profile", "PUT", token)
 
             val body = JSONObject().apply {
                 if (nom != null) put("nom", nom)
@@ -95,11 +95,36 @@ class ApiService {
             null }
     }
 
-    fun getOffers(token: String): JSONObject? {
+    fun getOffersList(token: String): List<Offer>? {
         return try {
             val connection = openConnection("$BASE_URL/offers", "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
+
+            val stream = if (connection.responseCode in 200..299) {
+                connection.inputStream
+            } else {
+                connection.errorStream
+            }
+
+            val responseString = stream?.bufferedReader()?.readText() ?: ""
+            connection.disconnect()
+
+            if (responseString.isNotEmpty()) {
+                // Como es una lista, lo parseamos como JSONArray directamente
+                val jsonArray = org.json.JSONArray(responseString)
+                val offersList = mutableListOf<Offer>()
+
+                for (i in 0 until jsonArray.length()) {
+                    val item = jsonArray.getJSONObject(i)
+                    offersList.add(Offer.fromJson(item))
+                }
+                offersList
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     fun logout(token: String): JSONObject? {
@@ -140,4 +165,7 @@ class ApiService {
 
         return if (response.isNotEmpty()) { JSONObject(response) } else { null }
     }
+
+
+
 }

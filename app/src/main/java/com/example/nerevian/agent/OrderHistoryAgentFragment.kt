@@ -38,6 +38,10 @@ class OrderHistoryAgentFragment : Fragment() {
         fetchOrders()
     }
 
+    fun refreshData() {
+        fetchOrders()
+    }
+
     private fun fetchOrders() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiService.getOrders(session.token ?: "")

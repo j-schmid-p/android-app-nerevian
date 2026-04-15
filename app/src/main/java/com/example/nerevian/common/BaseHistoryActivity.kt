@@ -3,6 +3,7 @@ package com.example.nerevian.common
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,19 +11,33 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
 import com.example.nerevian.agent.OrderHistoryAgentFragment
 import com.example.nerevian.client.OrderHistoryClientFragment
+import com.example.nerevian.network.ApiService
 import com.example.nerevian.utils.NavigationBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+import com.example.nerevian.utils.SessionManager
+import kotlinx.coroutines.*
+import org.json.JSONObject
 
 class BaseHistoryActivity : AppCompatActivity() {
 
     private val ROL_CLIENT = 1
     private val ROL_AGENT = 3
 
+    private val apiService = ApiService()
+    private lateinit var session: SessionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home_page) // Using same layout with fragment_container
         
+        session = SessionManager(this)
+
         val mainView = findViewById<View>(R.id.main)
         ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,8 +52,12 @@ class BaseHistoryActivity : AppCompatActivity() {
         loadHistoryFragment()
     }
 
+    fun refreshHistory() {
+        loadHistoryFragment()
+    }
+
     private fun loadHistoryFragment() {
-        val rolId = getSharedPreferences("session", Context.MODE_PRIVATE).getInt("rol_id", -1)
+        val rolId = session.rolId
 
         val fragment = when (rolId) {
             ROL_CLIENT -> OrderHistoryClientFragment()

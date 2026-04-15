@@ -58,6 +58,15 @@ class ApiService {
         } catch (e: Exception) { null }
     }
 
+    fun getTracking(token: String, offerId: Int): JSONObject? {
+        return try {
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
+            readResponse(connection)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun updateProfile(
         token: String,
         nom: String? = null,

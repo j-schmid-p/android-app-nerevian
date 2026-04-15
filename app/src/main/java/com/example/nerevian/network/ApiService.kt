@@ -1,10 +1,6 @@
 package com.example.nerevian.network
 
-import android.icu.util.Output
-import android.widget.Toast
 import com.example.nerevian.data.Offer
-import com.google.android.gms.common.api.Response
-import com.google.api.Http
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -47,21 +43,6 @@ class ApiService {
         } catch (e: Exception) { null }
     }
 
-    fun getProfile(token: String): JSONObject? {
-        return try {
-            val connection = openConnection("$BASE_URL/profile", "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
-    }
-
-    fun getOrders(token: String): JSONObject? {
-        return try {
-            val connection = openConnection("$BASE_URL/orders", "GET", token)
-            //val connection = openConnection(BASE_URLL, "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
-    }
-
     fun updateProfile(
         token: String,
         nom: String? = null,
@@ -92,21 +73,6 @@ class ApiService {
     fun getCurrentTracking(token: String, offerId: Int): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking/current", "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun patchTracking(token: String, offerId: Int, stepId: Int): JSONObject? {
-        return try {
-            // Some Android versions don't support PATCH in HttpURLConnection directly.
-            // We use POST with a method override or try PATCH if supported.
-            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "PATCH", token)
-            val body = JSONObject().apply {
-                put("current_tracking_step_id", stepId)
-            }
-            writeBody(connection, body)
             readResponse(connection)
         } catch (e: Exception) {
             null

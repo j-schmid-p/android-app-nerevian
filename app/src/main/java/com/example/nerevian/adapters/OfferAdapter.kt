@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nerevian.R
 import com.example.nerevian.client.TrackerActivity
 import com.example.nerevian.data.Offer
-import kotlinx.coroutines.launch
 
 class OfferAdapter(
     private var offers: List<Offer>,
@@ -43,8 +41,6 @@ class OfferAdapter(
         val btnSeeOffer: TextView = view.findViewById(R.id.btn_see_offer)
         
         val agentTrackingSection: View = view.findViewById(R.id.agent_tracking_section)
-        val btnUpdateTracking: View = view.findViewById(R.id.btn_update_tracking)
-        val tvTrackingStatusLabel: TextView = view.findViewById(R.id.tv_tracking_status_label)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferViewHolder {
@@ -93,7 +89,6 @@ class OfferAdapter(
         if (isAgent) {
             holder.infoGrid.visibility = View.VISIBLE
             holder.routeInfo.visibility = View.VISIBLE
-            holder.agentTrackingSection.visibility = View.VISIBLE
             
             holder.labelLeft.text = "Customer:"
             holder.valueLeft.text = offer.clientName ?: "N/A"
@@ -101,37 +96,8 @@ class OfferAdapter(
             holder.valueRight.text = offer.incoterm ?: "N/A"
             holder.tvOrigin.text = offer.origin ?: "N/A"
             holder.tvDestination.text = offer.destination ?: "N/A"
-
-            // Fetch current tracking status for the label
-            val session = com.example.nerevian.utils.SessionManager(context)
-            val apiService = com.example.nerevian.network.ApiService()
             
-            holder.tvTrackingStatusLabel.text = "Loading..."
-            
-            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                val currentResult = apiService.getCurrentTracking(session.token ?: "", offer.id)
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                    if (currentResult != null) {
-                        val data = currentResult.optJSONObject("data")
-                        val currentStepName = data?.optString("nom") ?: "N/A"
-                        holder.tvTrackingStatusLabel.text = currentStepName
-                    } else {
-                        holder.tvTrackingStatusLabel.text = "N/A"
-                    }
-                }
-            }
-
-            holder.btnUpdateTracking.setOnClickListener {
-                android.util.Log.d("OfferAdapter", "UPDATE TRACKING clicked for order ${offer.id}")
-                try {
-                    val intent = Intent(context, com.example.nerevian.agent.UpdateTrackingActivity::class.java)
-                    intent.putExtra("offer_id", offer.id)
-                    context.startActivity(intent)
-                } catch (e: Exception) {
-                    android.util.Log.e("OfferAdapter", "Error starting UpdateTrackingActivity", e)
-                    Toast.makeText(context, "Error starting activity", Toast.LENGTH_SHORT).show()
-                }
-            }
+            holder.agentTrackingSection.visibility = View.GONE
         } else {
             val status = offer.status.uppercase().trim()
             val isActive = status == "ACCEPTED" || status == "FINISHED" || status == "SHIPPED" || status == "IN TRANSIT"

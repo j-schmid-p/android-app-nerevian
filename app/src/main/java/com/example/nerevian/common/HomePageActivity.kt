@@ -43,9 +43,5 @@ class HomePageActivity : AppCompatActivity() {
         val welcomeName = findViewById<TextView>(R.id.welcome_name)
         val fullName = "${session.name} ${session.lastName}"
         welcomeName.text = fullName
-
-        if (session.rolId == ROL_AGENT) {
-            // Additional agent-specific UI logic can go here
-        }
     }
 }

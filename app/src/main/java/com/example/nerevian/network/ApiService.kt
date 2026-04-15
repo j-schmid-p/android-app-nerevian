@@ -62,37 +62,55 @@ class ApiService {
         } catch (e: Exception) { null }
     }
 
-    fun getTracking(token: String, offerId: Int): JSONObject? {
+    fun updateProfile(
+        token: String,
+        nom: String? = null,
+        cognoms: String? = null
+    ): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
-            //val connection = openConnection(BASE_URLL, "GET", token)
+            val connection = openConnection("$BASE_URL/profile", "PUT", token)
+            val body = JSONObject().apply {
+                if (nom != null) put("nom", nom)
+                if (cognoms != null) put("cognoms", cognoms)
+            }
+            writeBody(connection, body)
             readResponse(connection)
         } catch (e: Exception) {
             null
         }
     }
 
-    fun updateProfile(
-        token: String,
-        nom: String? = null,
-        cognoms: String? = null
-/* , birthdate: String? = null */
-    ): JSONObject? {
+    fun getTrackingOptions(token: String, offerId: Int): JSONObject? {
         return try {
-             //val connection = openConnection(BASE_URLL, "PUT", token)
-            val connection = openConnection("$BASE_URL/profile", "PUT", token)
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
+            readResponse(connection)
+        } catch (e: Exception) {
+            null
+        }
+    }
 
+    fun getCurrentTracking(token: String, offerId: Int): JSONObject? {
+        return try {
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking/current", "GET", token)
+            readResponse(connection)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun patchTracking(token: String, offerId: Int, stepId: Int): JSONObject? {
+        return try {
+            // Some Android versions don't support PATCH in HttpURLConnection directly.
+            // We use POST with a method override or try PATCH if supported.
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "PATCH", token)
             val body = JSONObject().apply {
-                if (nom != null) put("nom", nom)
-                if (cognoms != null) put("cognoms", cognoms)
-                // if (birthdate != null) put("data_naixement", birthdate)
+                put("current_tracking_step_id", stepId)
             }
-
             writeBody(connection, body)
             readResponse(connection)
         } catch (e: Exception) {
-            println("Error: ${e.message}")
-            null }
+            null
+        }
     }
 
     fun getOffersList(token: String): List<Offer>? {
@@ -105,12 +123,12 @@ class ApiService {
                 connection.errorStream
             }
 
-            val responseString = stream?.bufferedReader()?.readText() ?: ""
+            val response = stream?.bufferedReader()?.readText() ?: ""
             connection.disconnect()
 
-            if (responseString.isNotEmpty()) {
+            if (response.isNotEmpty()) {
                 // Como es una lista, lo parseamos como JSONArray directamente
-                val jsonArray = org.json.JSONArray(responseString)
+                val jsonArray = org.json.JSONArray(response)
                 val offersList = mutableListOf<Offer>()
 
                 for (i in 0 until jsonArray.length()) {

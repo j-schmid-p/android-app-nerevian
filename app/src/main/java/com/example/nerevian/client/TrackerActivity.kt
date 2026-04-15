@@ -1,6 +1,5 @@
 package com.example.nerevian.client
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.nerevian.R
-import com.example.nerevian.common.HomePageActivity
-import com.example.nerevian.common.BaseHistoryActivity
-import com.example.nerevian.common.ProfileActivity
 import com.example.nerevian.network.ApiService
 import com.example.nerevian.utils.SessionManager
 import com.example.nerevian.utils.NavigationBar
@@ -25,22 +21,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+import org.json.JSONArray
+import org.json.JSONObject
+
 class TrackerActivity : AppCompatActivity() {
 
     private val apiService = ApiService()
     private lateinit var stepsContainer: LinearLayout
-
-    private val allSteps = listOf(
-        "Pickup at origin",
-        "Arrival at consolidation warehouse",
-        "Export customs clearance",
-        "Departure from origin port/airport",
-        "In international transit",
-        "Arrival at destination port/airport",
-        "Import customs clearance",
-        "Out for delivery (Last mile)",
-        "Delivered to final customer"
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +44,6 @@ class TrackerActivity : AppCompatActivity() {
 
         val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         NavigationBar(this).setup(navView)
-        // No item is selected by default in Tracker as it's a detail view, 
-        // or you can select Home if you consider it part of Home flow.
 
         loadTracking()
     }
@@ -68,48 +53,45 @@ class TrackerActivity : AppCompatActivity() {
         val offerId = intent.getIntExtra("offer_id", -1)
 
         if (offerId == -1 || session.token == null) {
-            // Si no hi ha oferta, mostrem els passos sense cap actiu
-            renderSteps(currentStepIndex = -1)
             return
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            val result = apiService.getTracking(session.token!!, offerId)
+            val optionsResult = apiService.getTrackingOptions(session.token!!, offerId)
+            val currentResult = apiService.getCurrentTracking(session.token!!, offerId)
 
             withContext(Dispatchers.Main) {
-                if (result == null) {
-                    renderSteps(currentStepIndex = -1)
+                if (optionsResult == null) {
                     return@withContext
                 }
 
-                // La API retorna l'últim pas completat
-                // Busquem quin índex correspon al tracking_step_id actual
-                val trackingArray = result.optJSONArray("data")
-                val lastCompletedOrder = if (trackingArray != null && trackingArray.length() > 0) {
-                    // Agafem l'últim element (el més avançat)
-                    var maxOrder = 0
-                    for (i in 0 until trackingArray.length()) {
-                        val step = trackingArray.getJSONObject(i)
-                        val ordre = step.optJSONObject("step")?.optInt("ordre") ?: step.optInt("ordre", 0)
-                        if (ordre > maxOrder) maxOrder = ordre
+                val optionsArray = optionsResult.optJSONArray("data") ?: JSONArray()
+                val currentData = currentResult?.optJSONObject("data")
+                val currentId = currentData?.optInt("id", -1) ?: -1
+
+                val steps = mutableListOf<String>()
+                var currentStepIndex = -1
+
+                for (i in 0 until optionsArray.length()) {
+                    val step = optionsArray.getJSONObject(i)
+                    val id = step.getInt("id")
+                    val name = step.getString("nom")
+                    steps.add(name)
+                    if (id == currentId) {
+                        currentStepIndex = i
                     }
-                    maxOrder
-                } else {
-                    0
                 }
 
-                // ordre va de 1 a 9, index va de 0 a 8
-                renderSteps(currentStepIndex = lastCompletedOrder - 1)
+                renderSteps(steps, currentStepIndex)
             }
         }
     }
 
-    private fun renderSteps(currentStepIndex: Int) {
+    private fun renderSteps(steps: List<String>, currentStepIndex: Int) {
         stepsContainer.removeAllViews()
         val inflater = LayoutInflater.from(this)
 
-        allSteps.forEachIndexed { index, stepName ->
-            // Afegir el pas
+        steps.forEachIndexed { index, stepName ->
             val stepView = inflater.inflate(R.layout.item_tracking_step, stepsContainer, false)
             val circle = stepView.findViewById<ImageView>(R.id.step_circle)
             val label = stepView.findViewById<TextView>(R.id.step_label)
@@ -118,26 +100,31 @@ class TrackerActivity : AppCompatActivity() {
 
             when {
                 index < currentStepIndex -> {
+                    // Completed steps
                     circle.setImageResource(R.drawable.tracking_dark_circle)
                     label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
                     label.typeface = ResourcesCompat.getFont(this, R.font.jost_extralight)
+                    label.alpha = 0.5f
                 }
                 index == currentStepIndex -> {
-                    circle.setImageResource(R.drawable.tracking_light_circle)
+                    // Current active step
                     circle.setImageResource(R.drawable.tracking_dark_circle)
                     label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
-                    label.typeface = ResourcesCompat.getFont(this, R.font.jost_semibold)
+                    label.typeface = ResourcesCompat.getFont(this, R.font.jost_bold)
+                    label.alpha = 1.0f
                 }
                 else -> {
+                    // Future steps
                     circle.setImageResource(R.drawable.tracking_light_circle)
                     label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
                     label.typeface = ResourcesCompat.getFont(this, R.font.jost_extralightitalic)
+                    label.alpha = 0.5f
                 }
             }
 
             stepsContainer.addView(stepView)
 
-            if (index < allSteps.size - 1) {
+            if (index < steps.size - 1) {
                 val arrowView = inflater.inflate(R.layout.item_tracking_arrow, stepsContainer, false)
                 stepsContainer.addView(arrowView)
             }

@@ -69,17 +69,10 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-        /*
-        birthdateTxt.setOnClickListener {
-            if (isEditMode) {
-                showDatePicker()
-            }
-        }
-         */
-
         val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        NavigationBar(this).setup(navView)
+        navView.setOnItemSelectedListener(null) // Prevent navigation loop
         navView.selectedItemId = R.id.nav_profile
+        NavigationBar(this).setup(navView)
 
         logout()
     }
@@ -87,6 +80,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun loadUserData() {
         nameTxt.setText(session.name)
         lastNameTxt.setText(session.lastName)
+        etId.setText(session.email) // Show email as identification
         profileNameHeader.text = " ${session.name} ${session.lastName}"
     }
 
@@ -119,8 +113,6 @@ class ProfileActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Sending the updated name and last name to the API
-                // val response = apiService.updateProfile(session.token ?: "", name, lastName, birthdate)
                 val response = apiService.updateProfile(session.token ?: "", name, lastName)
                 
                 withContext(Dispatchers.Main) {

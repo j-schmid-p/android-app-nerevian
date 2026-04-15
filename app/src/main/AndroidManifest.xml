@@ -32,6 +32,9 @@
         <activity
             android:name=".agent.OrderInfoActivity"
             android:exported="false" />
+        <activity
+            android:name=".client.OrderInfoActivity"
+            android:exported="false" />
 
         <activity
             android:name=".common.LoginActivity"

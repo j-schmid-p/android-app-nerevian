@@ -34,7 +34,7 @@ class BaseHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_home_page) // Using same layout with fragment_container
+        setContentView(R.layout.activity_home_page)
         
         session = SessionManager(this)
 

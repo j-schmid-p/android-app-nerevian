@@ -15,13 +15,6 @@ class OrderInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_info)
 
-        val navView = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation)
-        com.example.nerevian.utils.NavigationBar(this).setup(navView)
-        // Disabling the navigation listener briefly to prevent automatic redirection
-        navView.setOnItemSelectedListener(null)
-        navView.selectedItemId = R.id.nav_history
-        com.example.nerevian.utils.NavigationBar(this).setup(navView)
-
         val offerJson = intent.getStringExtra("offer_json")
         android.util.Log.d("OrderInfoActivity", "Received offerJson: $offerJson")
         if (offerJson != null) {
@@ -30,6 +23,8 @@ class OrderInfoActivity : AppCompatActivity() {
         } else {
             android.util.Log.e("OrderInfoActivity", "No offerJson found in intent extras")
         }
+
+        setupNavigationBar()
     }
 
     private fun displayOrderInfo(offer: Offer) {
@@ -67,5 +62,10 @@ class OrderInfoActivity : AppCompatActivity() {
             textView.visibility = View.VISIBLE
             textView.text = value
         }
+    }
+
+    private fun setupNavigationBar() {
+        val navView = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation)
+        com.example.nerevian.utils.NavigationBar(this).setup(navView)
     }
 }

@@ -39,7 +39,6 @@ class OfferAdapter(
         val btnTrack: TextView = view.findViewById(R.id.btn_track)
         val btnSeeInfo: TextView = view.findViewById(R.id.btn_see_info)
         val btnSeeOffer: TextView = view.findViewById(R.id.btn_see_offer)
-        
         val agentTrackingSection: View = view.findViewById(R.id.agent_tracking_section)
     }
 

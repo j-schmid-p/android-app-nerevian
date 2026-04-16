@@ -51,7 +51,6 @@ class ProfileActivity : AppCompatActivity() {
 
         nameTxt = findViewById(R.id.et_name)
         lastNameTxt = findViewById(R.id.et_last_name)
-        //birthdateTxt = findViewById(R.id.et_birthdate)
         etId = findViewById(R.id.et_id)
         btnEditSave = findViewById(R.id.btn_edit_save)
         profileNameHeader = findViewById(R.id.profile_name_header)
@@ -68,13 +67,9 @@ class ProfileActivity : AppCompatActivity() {
                 inputManager.showSoftInput(nameTxt, InputMethodManager.SHOW_IMPLICIT)
             }
         }
-
-        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        navView.setOnItemSelectedListener(null) // Prevent navigation loop
-        navView.selectedItemId = R.id.nav_profile
-        NavigationBar(this).setup(navView)
-
+        
         logout()
+        setupNavigationBar()
     }
 
     private fun loadUserData() {
@@ -165,4 +160,10 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
+    
+    private fun setupNavigationBar() {
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
+    }
+
 }

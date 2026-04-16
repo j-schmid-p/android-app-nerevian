@@ -1,6 +1,7 @@
 package com.example.nerevian.network
 
 import com.example.nerevian.data.Offer
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -18,10 +19,10 @@ class ApiService {
 
     //IP si es corre amb movil endollat
     // (canviar IP per la del PC que s'estigui fent servir)
+    //IP si es corre amb movil endollat
+    // (canviar IP per la del PC que s'estigui fent servir)
     private val BASE_URL = "http://192.168.1.48:8000/api"
-    private val BASE_URLL = "https://webhook.site/340d8a1d-343f-48f8-8c77-db3624ec5bf4"
-
-
+    
     fun login(email: String, password: String) : JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/login", "POST", null)
@@ -32,14 +33,14 @@ class ApiService {
             }
 
             writeBody(connection, body)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) { null }
     }
 
     fun getMe(token: String): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/me", "GET", token)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) { null }
     }
 
@@ -55,7 +56,7 @@ class ApiService {
                 if (cognoms != null) put("cognoms", cognoms)
             }
             writeBody(connection, body)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
             null
         }
@@ -64,7 +65,7 @@ class ApiService {
     fun getTrackingOptions(token: String, offerId: Int): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
             null
         }
@@ -73,7 +74,7 @@ class ApiService {
     fun getCurrentTracking(token: String, offerId: Int): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking/current", "GET", token)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
             null
         }
@@ -82,21 +83,10 @@ class ApiService {
     fun getOffersList(token: String): List<Offer>? {
         return try {
             val connection = openConnection("$BASE_URL/offers", "GET", token)
+            val jsonArray = readJSONArray(connection)
 
-            val stream = if (connection.responseCode in 200..299) {
-                connection.inputStream
-            } else {
-                connection.errorStream
-            }
-
-            val response = stream?.bufferedReader()?.readText() ?: ""
-            connection.disconnect()
-
-            if (response.isNotEmpty()) {
-                // Como es una lista, lo parseamos como JSONArray directamente
-                val jsonArray = org.json.JSONArray(response)
+            if (jsonArray != null) {
                 val offersList = mutableListOf<Offer>()
-
                 for (i in 0 until jsonArray.length()) {
                     val item = jsonArray.getJSONObject(i)
                     offersList.add(Offer.fromJson(item))
@@ -114,7 +104,7 @@ class ApiService {
     fun logout(token: String): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/logout", "POST", token)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) { null }
     }
 
@@ -139,17 +129,24 @@ class ApiService {
         }
     }
 
-    private fun readResponse(connection: HttpURLConnection): JSONObject? {
-        val stream = if (connection.responseCode in 200..299) {
-            connection.inputStream
-        } else { connection.errorStream }
-
-        val response = stream?.bufferedReader()?.readText() ?: ""
-        connection.disconnect()
-
+    private fun readJSONObject(connection: HttpURLConnection): JSONObject? {
+        val response = readRawResponse(connection)
         return if (response.isNotEmpty()) { JSONObject(response) } else { null }
     }
 
+    private fun readJSONArray(connection: HttpURLConnection): JSONArray? {
+        val response = readRawResponse(connection)
+        return if (response.isNotEmpty()) { JSONArray(response) } else { null }
+    }
 
-
+    private fun readRawResponse(connection: HttpURLConnection): String {
+        val stream = if (connection.responseCode in 200..299) {
+            connection.inputStream
+        } else {
+            connection.errorStream
+        }
+        val response = stream?.bufferedReader()?.readText() ?: ""
+        connection.disconnect()
+        return response
+    }
 }

@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import org.json.JSONArray
-import org.json.JSONObject
 
 class TrackerActivity : AppCompatActivity() {
 
@@ -42,10 +41,8 @@ class TrackerActivity : AppCompatActivity() {
 
         stepsContainer = findViewById(R.id.steps_container)
 
-        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        NavigationBar(this).setup(navView)
-
         loadTracking()
+        setupNavigationBar()
     }
 
     private fun loadTracking() {
@@ -129,5 +126,10 @@ class TrackerActivity : AppCompatActivity() {
                 stepsContainer.addView(arrowView)
             }
         }
+    }
+
+    private fun setupNavigationBar() {
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
     }
 }

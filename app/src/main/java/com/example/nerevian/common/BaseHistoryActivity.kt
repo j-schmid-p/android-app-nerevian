@@ -45,11 +45,8 @@ class BaseHistoryActivity : AppCompatActivity() {
             insets
         }
 
-        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        NavigationBar(this).setup(navView)
-        navView.selectedItemId = R.id.nav_history
-
         loadHistoryFragment()
+        setupNavigationBar()
     }
 
     fun refreshHistory() {
@@ -68,5 +65,10 @@ class BaseHistoryActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
+    }
+
+    private fun setupNavigationBar() {
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
     }
 }

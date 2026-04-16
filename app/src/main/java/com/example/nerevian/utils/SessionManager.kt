@@ -4,6 +4,11 @@ import android.content.Context
 
 class SessionManager(private val context: Context) {
 
+    companion object {
+        const val ROL_CLIENT = 1
+        const val ROL_AGENT = 3
+    }
+
     private val preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE)
 
     val token: String? get() = preferences.getString("token", null)

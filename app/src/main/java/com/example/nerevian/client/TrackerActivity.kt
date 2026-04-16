@@ -49,37 +49,36 @@ class TrackerActivity : AppCompatActivity() {
         val session = SessionManager(this)
         val offerId = intent.getIntExtra("offer_id", -1)
 
-        if (offerId == -1 || session.token == null) {
-            return
-        }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val optionsResult = apiService.getTrackingOptions(session.token!!, offerId)
-            val currentResult = apiService.getCurrentTracking(session.token!!, offerId)
+        if (offerId != -1 || session.token != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val optionsResult = apiService.getTrackingOptions(session.token!!, offerId)
+                val currentResult = apiService.getCurrentTracking(session.token!!, offerId)
 
-            withContext(Dispatchers.Main) {
-                if (optionsResult == null) {
-                    return@withContext
-                }
-
-                val optionsArray = optionsResult.optJSONArray("data") ?: JSONArray()
-                val currentData = currentResult?.optJSONObject("data")
-                val currentId = currentData?.optInt("id", -1) ?: -1
-
-                val steps = mutableListOf<String>()
-                var currentStepIndex = -1
-
-                for (i in 0 until optionsArray.length()) {
-                    val step = optionsArray.getJSONObject(i)
-                    val id = step.getInt("id")
-                    val name = step.getString("nom")
-                    steps.add(name)
-                    if (id == currentId) {
-                        currentStepIndex = i
+                withContext(Dispatchers.Main) {
+                    if (optionsResult == null) {
+                        return@withContext
                     }
-                }
 
-                renderSteps(steps, currentStepIndex)
+                    val optionsArray = optionsResult.optJSONArray("data") ?: JSONArray()
+                    val currentData = currentResult?.optJSONObject("data")
+                    val currentId = currentData?.optInt("id", -1) ?: -1
+
+                    val steps = mutableListOf<String>()
+                    var currentStepIndex = -1
+
+                    for (i in 0 until optionsArray.length()) {
+                        val step = optionsArray.getJSONObject(i)
+                        val id = step.getInt("id")
+                        val name = step.getString("nom")
+                        steps.add(name)
+                        if (id == currentId) {
+                            currentStepIndex = i
+                        }
+                    }
+
+                    renderSteps(steps, currentStepIndex)
+                }
             }
         }
     }

@@ -99,7 +99,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun saveProfile() {
         val name = nameTxt.text.toString().trim()
         val lastName = lastNameTxt.text.toString().trim()
-        // val birthdate = birthdateTxt.text.toString()
 
         if (name.isEmpty() || lastName.isEmpty()) {
             Toast.makeText(this, "Name and Last Name cannot be empty", Toast.LENGTH_SHORT).show()

@@ -17,8 +17,6 @@ class SessionManager(private val context: Context) {
     val name: String get() = preferences.getString("nom", "") ?: ""
     val lastName: String get() = preferences.getString("cognoms", "") ?: ""
     val rolId: Int get() = preferences.getInt("rol_id", -1)
-    val clientId: Int get() = preferences.getInt("client_id", -1)
-
 
     fun logout() { preferences.edit().clear().apply() }
 

@@ -70,7 +70,6 @@ class OfferAdapter(
             }
         }
 
-        // Reset visibility
         holder.infoGrid.visibility = View.GONE
         holder.routeInfo.visibility = View.GONE
         holder.actionButtonsClient.visibility = View.GONE
@@ -99,13 +98,14 @@ class OfferAdapter(
             holder.agentTrackingSection.visibility = View.GONE
         } else {
             val status = offer.status.uppercase().trim()
-            val isActive = status == "ACCEPTED" || status == "FINISHED" || status == "SHIPPED" || status == "IN TRANSIT"
-            
+            val isActive =
+                status == "ACCEPTED" || status == "FINISHED" || status == "SHIPPED" || status == "IN TRANSIT"
+
             if (isActive) {
                 holder.infoGrid.visibility = View.VISIBLE
                 holder.routeInfo.visibility = View.VISIBLE
                 holder.actionButtonsClient.visibility = View.VISIBLE
-                
+
                 holder.labelLeft.text = "Incoterm:"
                 holder.valueLeft.text = offer.incoterm ?: "N/A"
                 holder.labelRight.text = "Cargo type:"
@@ -117,16 +117,31 @@ class OfferAdapter(
                     android.util.Log.d("OfferAdapter", "SEE INFO clicked for order ${offer.id}")
                     if (offer.rawJson != null) {
                         try {
-                            val intent = Intent(context, com.example.nerevian.client.OrderInfoActivity::class.java)
+                            val intent = Intent(
+                                context,
+                                com.example.nerevian.client.OrderInfoActivity::class.java
+                            )
                             intent.putExtra("offer_json", offer.rawJson)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(intent)
                         } catch (e: Exception) {
-                            android.util.Log.e("OfferAdapter", "Error starting OrderInfoActivity", e)
-                            Toast.makeText(context, "Error: Could not open details", Toast.LENGTH_SHORT).show()
+                            android.util.Log.e(
+                                "OfferAdapter",
+                                "Error starting OrderInfoActivity",
+                                e
+                            )
+                            Toast.makeText(
+                                context,
+                                "Error: Could not open details",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(context, "Error: No data available for this order", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Error: No data available for this order",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 

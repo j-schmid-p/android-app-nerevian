@@ -1,5 +1,6 @@
 package com.example.nerevian.network
 
+import android.util.Log
 import com.example.nerevian.data.Offer
 import org.json.JSONArray
 import org.json.JSONObject
@@ -8,6 +9,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class ApiService {
+
+    private val TAG = "ApiService"
 
     //IP local
     //private val BASE_URL = "http://127.0.0.1:8000/api"
@@ -34,14 +37,20 @@ class ApiService {
 
             writeBody(connection, body)
             readJSONObject(connection)
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            Log.e(TAG, "Login error: ${e.message}", e)
+            null
+        }
     }
 
     fun getMe(token: String): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/me", "GET", token)
             readJSONObject(connection)
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            Log.e(TAG, "getMe error: ${e.message}", e)
+            null
+        }
     }
 
     fun updateProfile(
@@ -58,6 +67,7 @@ class ApiService {
             writeBody(connection, body)
             readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "updateProfile error: ${e.message}", e)
             null
         }
     }
@@ -67,6 +77,7 @@ class ApiService {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
             readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "getTrackingOptions error: ${e.message}", e)
             null
         }
     }
@@ -76,6 +87,7 @@ class ApiService {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking/current", "GET", token)
             readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "getCurrentTracking error: ${e.message}", e)
             null
         }
     }
@@ -96,7 +108,7 @@ class ApiService {
                 null
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "getOffersList error: ${e.message}", e)
             null
         }
     }
@@ -105,7 +117,10 @@ class ApiService {
         return try {
             val connection = openConnection("$BASE_URL/auth/logout", "POST", token)
             readJSONObject(connection)
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            Log.e(TAG, "logout error: ${e.message}", e)
+            null
+        }
     }
 
     private fun openConnection(url: String, method: String, token: String?) : HttpURLConnection {

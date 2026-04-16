@@ -40,10 +40,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginBtn = findViewById<Button>(R.id.loginButton)
+        loginBtn.setOnClickListener { validateInputs() }
 
         checkSession()
-
-        loginBtn.setOnClickListener { validateInputs() }
     }
 
     private fun checkSession() {

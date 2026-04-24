@@ -44,7 +44,11 @@ data class Offer(
             val cargoType = cargoObj?.optString("tipus")
 
             val incotermObj = json.optJSONObject("incoterm")
-            val incoterm = incotermObj?.optString("nom")
+            val tipusIncotermObj = incotermObj?.optJSONObject("tipus_incoterm")
+            // Try 'codi' first, then 'nom', then fallback to 'incoterm'
+            val incoterm = tipusIncotermObj?.optString("codi")?.trim() 
+                ?: tipusIncotermObj?.optString("nom")
+                ?: incotermObj?.optString("nom")
 
             val portOrigin = json.optJSONObject("port_origen")?.optString("nom")
             val airportOrigin = json.optJSONObject("aeroport_origen")?.optString("nom")

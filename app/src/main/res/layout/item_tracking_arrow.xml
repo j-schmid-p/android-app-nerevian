@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="start"
-    android:paddingStart="15dp">
+    android:paddingStart="40dp">
 
     <ImageView
-        android:layout_width="18dp"
-        android:layout_height="24dp"
+        android:layout_width="20dp"
+        android:layout_height="60dp"
         android:src="@drawable/ic_timeline_arrow"/>
 </LinearLayout>

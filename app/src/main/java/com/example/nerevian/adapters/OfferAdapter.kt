@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nerevian.R
 import com.example.nerevian.client.TrackerActivity
 import com.example.nerevian.data.Offer
-import kotlinx.coroutines.launch
 
 class OfferAdapter(
     private var offers: List<Offer>,
@@ -41,10 +39,9 @@ class OfferAdapter(
         val btnTrack: TextView = view.findViewById(R.id.btn_track)
         val btnSeeInfo: TextView = view.findViewById(R.id.btn_see_info)
         val btnSeeOffer: TextView = view.findViewById(R.id.btn_see_offer)
-        
         val agentTrackingSection: View = view.findViewById(R.id.agent_tracking_section)
-        val btnUpdateTracking: View = view.findViewById(R.id.btn_update_tracking)
         val tvTrackingStatusLabel: TextView = view.findViewById(R.id.tv_tracking_status_label)
+        val btnUpdateTracking: TextView = view.findViewById(R.id.btn_update_tracking)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferViewHolder {
@@ -76,13 +73,13 @@ class OfferAdapter(
             }
         }
 
-        // Reset visibility
         holder.infoGrid.visibility = View.GONE
         holder.routeInfo.visibility = View.GONE
         holder.actionButtonsClient.visibility = View.GONE
         holder.pendingSection.visibility = View.GONE
         holder.labelRight.visibility = View.VISIBLE
         holder.valueRight.visibility = View.VISIBLE
+        holder.agentTrackingSection.visibility = View.GONE
 
         holder.expandableContent.visibility = if (offer.isExpanded) View.VISIBLE else View.GONE
 
@@ -123,13 +120,14 @@ class OfferAdapter(
             }
         } else {
             val status = offer.status.uppercase().trim()
-            val isActive = status == "ACCEPTED" || status == "FINISHED" || status == "SHIPPED" || status == "IN TRANSIT"
-            
+            val isActive =
+                status == "ACCEPTED" || status == "FINISHED" || status == "SHIPPED" || status == "IN TRANSIT"
+
             if (isActive) {
                 holder.infoGrid.visibility = View.VISIBLE
                 holder.routeInfo.visibility = View.VISIBLE
                 holder.actionButtonsClient.visibility = View.VISIBLE
-                
+
                 holder.labelLeft.text = "Incoterm:"
                 holder.valueLeft.text = offer.incoterm ?: "N/A"
                 holder.labelRight.text = "Cargo type:"
@@ -141,16 +139,31 @@ class OfferAdapter(
                     android.util.Log.d("OfferAdapter", "SEE INFO clicked for order ${offer.id}")
                     if (offer.rawJson != null) {
                         try {
-                            val intent = Intent(context, com.example.nerevian.client.OrderInfoActivity::class.java)
+                            val intent = Intent(
+                                context,
+                                com.example.nerevian.client.OrderInfoActivity::class.java
+                            )
                             intent.putExtra("offer_json", offer.rawJson)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(intent)
                         } catch (e: Exception) {
-                            android.util.Log.e("OfferAdapter", "Error starting OrderInfoActivity", e)
-                            Toast.makeText(context, "Error: Could not open details", Toast.LENGTH_SHORT).show()
+                            android.util.Log.e(
+                                "OfferAdapter",
+                                "Error starting OrderInfoActivity",
+                                e
+                            )
+                            Toast.makeText(
+                                context,
+                                "Error: Could not open details",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(context, "Error: No data available for this order", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Error: No data available for this order",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 

@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nerevian.R
-
 import com.example.nerevian.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
     private val ROL_CLIENT = 1
     private val ROL_AGENT = 3
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,11 +37,11 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        loginBtn = findViewById<Button>(R.id.loginButton)
-
-        checkSession()
+        loginBtn = findViewById(R.id.loginButton)
 
         loginBtn.setOnClickListener { validateInputs() }
+
+        checkSession()
     }
 
     private fun checkSession() {
@@ -56,17 +54,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateInputs () {
+    private fun validateInputs() {
         val email = findViewById<EditText>(R.id.emailInput).text.toString().trim()
         val password = findViewById<EditText>(R.id.passwordInput).text.toString().trim()
 
-        if (password.isEmpty() || email.isEmpty()){
+        if (password.isEmpty() || email.isEmpty()) {
             Toast.makeText(this, "Please enter both your email and password",
-                Toast.LENGTH_SHORT).show()
-        }
-        else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                           Toast.LENGTH_SHORT).show()
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this, "Please enter a valid email",
-                Toast.LENGTH_SHORT).show()
+                           Toast.LENGTH_SHORT).show()
         } else {
             callAPI(email, password)
         }
@@ -116,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToUserActivity(role : Int) {
+    private fun goToUserActivity(role: Int) {
         if (role == ROL_CLIENT || role == ROL_AGENT) {
             val intent = Intent(this, HomePageActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -127,8 +124,8 @@ class LoginActivity : AppCompatActivity() {
                 .edit { clear() }
 
             Toast.makeText(this,
-                "You cannot login to this app with the user role you hold",
-                Toast.LENGTH_SHORT).show()
+                           "You cannot login to this app with the user role you hold",
+                           Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -21,8 +21,11 @@ class GameActivity : AppCompatActivity() {
             insets
         }
 
+        setupNavigationBar()
+    }
+
+    private fun setupNavigationBar() {
         val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         NavigationBar(this).setup(navView)
-        navView.selectedItemId = R.id.nav_games
     }
 }

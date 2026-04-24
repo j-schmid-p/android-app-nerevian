@@ -13,9 +13,6 @@ import com.example.nerevian.utils.SessionManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomePageActivity : AppCompatActivity() {
-
-    private val ROL_CLIENT = 1
-    private val ROL_AGENT = 3
     private lateinit var session: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,17 +28,19 @@ class HomePageActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
-
-        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        NavigationBar(this).setup(navView)
-        navView.selectedItemId = R.id.nav_home
-
+        
         setupUI()
+        setupNavigationBar()
     }
 
     private fun setupUI() {
         val welcomeName = findViewById<TextView>(R.id.welcome_name)
         val fullName = "${session.name} ${session.lastName}"
         welcomeName.text = fullName
+    }
+    
+    private fun setupNavigationBar() {
+        val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        NavigationBar(this).setup(navView)
     }
 }

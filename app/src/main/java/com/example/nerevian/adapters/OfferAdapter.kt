@@ -58,19 +58,20 @@ class OfferAdapter(
         
         holder.orderId.text = context.getString(R.string.order_number_placeholder, offer.id.toString())
         
+        // Status Tag Logic (Visible only for Clients)
+        val status = offer.status.uppercase().trim()
+        holder.statusTag.text = status
+        
         if (isAgent) {
             holder.statusTag.visibility = View.GONE
         } else {
             holder.statusTag.visibility = View.VISIBLE
-            val status = offer.status.uppercase().trim()
-            holder.statusTag.text = status
-            
-            when (status) {
-                "ACCEPTED" -> holder.statusTag.setBackgroundResource(R.drawable.status_accepted_green)
-                "SHIPPED", "IN TRANSIT" -> holder.statusTag.setBackgroundResource(R.drawable.status_accepted_green)
-                "PENDING" -> holder.statusTag.setBackgroundResource(R.drawable.status_pending_yellow)
-                "REJECTED" -> holder.statusTag.setBackgroundResource(R.drawable.status_rejected_gray)
-                "FINISHED" -> holder.statusTag.setBackgroundResource(R.drawable.status_finished_white)
+            when (offer.statusId) {
+                2 -> holder.statusTag.setBackgroundResource(R.drawable.status_accepted_green) // Accepted
+                4, 7, 8 -> holder.statusTag.setBackgroundResource(R.drawable.status_accepted_green) // Shipped/Transit/Delivery
+                1 -> holder.statusTag.setBackgroundResource(R.drawable.status_pending_yellow) // Pending
+                3, 5 -> holder.statusTag.setBackgroundResource(R.drawable.status_rejected_gray) // Rejected/Delayed
+                6 -> holder.statusTag.setBackgroundResource(R.drawable.status_finished_white) // Finalized
                 else -> holder.statusTag.setBackgroundResource(R.drawable.status_rejected_gray)
             }
         }
@@ -102,23 +103,11 @@ class OfferAdapter(
             holder.tvOrigin.text = offer.origin ?: "N/A"
             holder.tvDestination.text = offer.destination ?: "N/A"
 
-            // Fetch current tracking status for the label
-            val session = com.example.nerevian.utils.SessionManager(context)
-            val apiService = com.example.nerevian.network.ApiService()
-            
-            holder.tvTrackingStatusLabel.text = "Loading..."
-            
-            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                val currentResult = apiService.getCurrentTracking(session.token ?: "", offer.id)
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                    if (currentResult != null) {
-                        val data = currentResult.optJSONObject("data")
-                        val currentStepName = data?.optString("nom") ?: "N/A"
-                        holder.tvTrackingStatusLabel.text = currentStepName
-                    } else {
-                        holder.tvTrackingStatusLabel.text = "N/A"
-                    }
-                }
+            // Use pre-loaded tracking step
+            if (offer.trackingStepName != null) {
+                holder.tvTrackingStatusLabel.text = offer.trackingStepName
+            } else {
+                holder.tvTrackingStatusLabel.text = "No tracking set"
             }
 
             holder.btnUpdateTracking.setOnClickListener {

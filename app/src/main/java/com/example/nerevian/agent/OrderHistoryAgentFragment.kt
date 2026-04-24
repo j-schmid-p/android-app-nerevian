@@ -46,16 +46,19 @@ class OrderHistoryAgentFragment : Fragment() {
     }
 
     private fun fetchOrders() {
+        val token = session.token ?: return
         CoroutineScope(Dispatchers.IO).launch {
-            val offersList = apiService.getOffersList(session.token ?: "")
+            val offersList = apiService.getOffersList(token)
             withContext(Dispatchers.Main) {
-                if (offersList != null) {
-                    if (offersList.isEmpty()) {
-                        Toast.makeText(requireContext(), "No orders found", Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    if (offersList != null) {
+                        if (offersList.isEmpty()) {
+                            Toast.makeText(requireContext(), "No orders found", Toast.LENGTH_SHORT).show()
+                        }
+                        adapter.updateData(offersList)
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to load orders", Toast.LENGTH_SHORT).show()
                     }
-                    adapter.updateData(offersList)
-                } else {
-                    Toast.makeText(requireContext(), "Failed to load orders", Toast.LENGTH_SHORT).show()
                 }
             }
         }

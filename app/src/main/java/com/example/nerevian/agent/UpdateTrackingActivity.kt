@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONObject
 
 class UpdateTrackingActivity : AppCompatActivity() {
 
@@ -59,8 +60,6 @@ class UpdateTrackingActivity : AppCompatActivity() {
         tvOrderTitle.text = "Order #$offerId"
 
         val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        navView.setOnItemSelectedListener(null)
-        navView.selectedItemId = R.id.nav_history
         NavigationBar(this).setup(navView)
 
         loadTrackingData()
@@ -77,42 +76,47 @@ class UpdateTrackingActivity : AppCompatActivity() {
             val optionsResult = apiService.getTrackingOptions(session.token!!, offerId)
             
             withContext(Dispatchers.Main) {
-                if (currentResult != null) {
-                    val data = currentResult.optJSONObject("data")
-                    val currentStepName = data?.optString("nom") ?: "N/A"
-                    tvCurrentStatus.text = currentStepName
-                }
+                android.util.Log.d("UpdateTracking", "Current Result Raw: $currentResult")
+                
+                // 1. Parse Current Tracking Step from "tracking_step" key
+                val stepObj = currentResult?.optJSONObject("tracking_step")
+                val currentStepName = stepObj?.optString("nom") ?: "No tracking set"
+                tvCurrentStatus.text = currentStepName
+                val currentStepId = stepObj?.optInt("id", -1) ?: -1
 
                 if (optionsResult != null) {
-                    val allSteps = optionsResult.optJSONArray("data") ?: JSONArray()
+                    android.util.Log.d("UpdateTracking", "Options Result Raw: $optionsResult")
+                    
+                    // 2. Parse Options from "tracking_steps" key
+                    val stepsArray = optionsResult.optJSONArray("tracking_steps")
+                    
                     statusList.clear()
                     val spinnerItems = mutableListOf<String>()
                     spinnerItems.add("Choose status")
                     
-                    var currentStepId: Int = -1
-                    if (currentResult != null) {
-                        currentStepId = currentResult.optJSONObject("data")?.optInt("id", -1) ?: -1
-                    }
-
-                    var selectedIndex = 0
-                    for (i in 0 until allSteps.length()) {
-                        val step = allSteps.getJSONObject(i)
-                        val id = step.getInt("id")
-                        val name = step.getString("nom")
-                        statusList.add(id to name)
-                        spinnerItems.add(name)
-                        
-                        if (id == currentStepId) {
-                            selectedIndex = i + 1 // +1 because of "Choose status"
+                    if (stepsArray != null && stepsArray.length() > 0) {
+                        var selectedIndex = 0
+                        for (i in 0 until stepsArray.length()) {
+                            val step = stepsArray.getJSONObject(i)
+                            val id = step.getInt("id")
+                            val name = step.getString("nom")
+                            statusList.add(id to name)
+                            spinnerItems.add(name)
+                            
+                            if (id == currentStepId) {
+                                selectedIndex = i + 1
+                            }
                         }
-                    }
 
-                    val adapter = ArrayAdapter(this@UpdateTrackingActivity, android.R.layout.simple_spinner_item, spinnerItems)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spinnerNewStatus.adapter = adapter
-                    
-                    if (selectedIndex > 0) {
-                        spinnerNewStatus.setSelection(selectedIndex)
+                        val adapter = ArrayAdapter(this@UpdateTrackingActivity, android.R.layout.simple_spinner_item, spinnerItems)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spinnerNewStatus.adapter = adapter
+                        
+                        if (selectedIndex > 0) {
+                            spinnerNewStatus.setSelection(selectedIndex)
+                        }
+                    } else {
+                        Toast.makeText(this@UpdateTrackingActivity, "No tracking options available for this Incoterm", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -126,18 +130,28 @@ class UpdateTrackingActivity : AppCompatActivity() {
             return
         }
 
-        val selectedStepId = statusList[selectedPosition - 1].first
+        val selectedStepPair = statusList[selectedPosition - 1]
+        val selectedStepId = selectedStepPair.first
         
         CoroutineScope(Dispatchers.IO).launch {
-            val result = apiService.patchTracking(session.token!!, offerId, selectedStepId)
+            // 1. Update Tracking Step
+            val trackingResult = apiService.updateTrackingStep(session.token!!, offerId, selectedStepId)
             
-            withContext(Dispatchers.Main) {
-                if (result != null) {
+            if (trackingResult != null) {
+                // 2. Sync Offer Status based on Step ID
+                val newStatusId = com.example.nerevian.utils.TrackingManager.getStatusForStepId(selectedStepId)
+                if (newStatusId != -1) {
+                    apiService.updateOfferStatus(session.token!!, offerId, newStatusId)
+                }
+
+                withContext(Dispatchers.Main) {
                     Toast.makeText(this@UpdateTrackingActivity, "Tracking updated successfully", Toast.LENGTH_SHORT).show()
                     setResult(RESULT_OK)
                     finish()
-                } else {
-                    Toast.makeText(this@UpdateTrackingActivity, "Failed to update tracking", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@UpdateTrackingActivity, "Failed to update tracking. Check API permissions.", Toast.LENGTH_SHORT).show()
                 }
             }
         }

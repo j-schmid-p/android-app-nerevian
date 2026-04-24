@@ -1,16 +1,16 @@
 package com.example.nerevian.network
 
-import android.icu.util.Output
-import android.widget.Toast
+import android.util.Log
 import com.example.nerevian.data.Offer
-import com.google.android.gms.common.api.Response
-import com.google.api.Http
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
 class ApiService {
+
+    private val TAG = "ApiService"
 
     //IP local
     //private val BASE_URL = "http://127.0.0.1:8000/api"
@@ -23,9 +23,7 @@ class ApiService {
     //IP si es corre amb movil endollat
     // (canviar IP per la del PC que s'estigui fent servir)
     private val BASE_URL = "http://192.168.1.48:8000/api"
-    private val BASE_URLL = "https://webhook.site/340d8a1d-343f-48f8-8c77-db3624ec5bf4"
-
-
+    
     fun login(email: String, password: String) : JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/login", "POST", null)
@@ -36,30 +34,21 @@ class ApiService {
             }
 
             writeBody(connection, body)
-            readResponse(connection)
-        } catch (e: Exception) { null }
+            readJSONObject(connection)
+        } catch (e: Exception) {
+            Log.e(TAG, "Login error: ${e.message}", e)
+            null
+        }
     }
 
     fun getMe(token: String): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/me", "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
-    }
-
-    fun getProfile(token: String): JSONObject? {
-        return try {
-            val connection = openConnection("$BASE_URL/profile", "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
-    }
-
-    fun getOrders(token: String): JSONObject? {
-        return try {
-            val connection = openConnection("$BASE_URL/orders", "GET", token)
-            //val connection = openConnection(BASE_URLL, "GET", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
+            readJSONObject(connection)
+        } catch (e: Exception) {
+            Log.e(TAG, "getMe error: ${e.message}", e)
+            null
+        }
     }
 
     fun updateProfile(
@@ -74,8 +63,9 @@ class ApiService {
                 if (cognoms != null) put("cognoms", cognoms)
             }
             writeBody(connection, body)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "updateProfile error: ${e.message}", e)
             null
         }
     }
@@ -83,8 +73,9 @@ class ApiService {
     fun getTrackingOptions(token: String, offerId: Int): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "GET", token)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "getTrackingOptions error: ${e.message}", e)
             null
         }
     }
@@ -92,23 +83,27 @@ class ApiService {
     fun getCurrentTracking(token: String, offerId: Int): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/offers/$offerId/tracking/current", "GET", token)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "getCurrentTracking error: ${e.message}", e)
             null
         }
     }
 
-    fun patchTracking(token: String, offerId: Int, stepId: Int): JSONObject? {
+    fun updateTrackingStep(token: String, offerId: Int, stepId: Int): JSONObject? {
         return try {
-            // Some Android versions don't support PATCH in HttpURLConnection directly.
-            // We use POST with a method override or try PATCH if supported.
-            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "PATCH", token)
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking", "POST", token)
+            // Some Laravel setups prefer standard PUT/PATCH if the route allows, 
+            // but your controller uses $request->validate inside updateTrackingStep.
+            // Let's use POST with X-HTTP-Method-Override PATCH to be safe
+            connection.setRequestProperty("X-HTTP-Method-Override", "PATCH")
             val body = JSONObject().apply {
-                put("current_tracking_step_id", stepId)
+                put("tracking_step_id", stepId)
             }
             writeBody(connection, body)
-            readResponse(connection)
+            readJSONObject(connection)
         } catch (e: Exception) {
+            Log.e(TAG, "updateTrackingStep error: ${e.message}", e)
             null
         }
     }
@@ -116,21 +111,10 @@ class ApiService {
     fun getOffersList(token: String): List<Offer>? {
         return try {
             val connection = openConnection("$BASE_URL/offers", "GET", token)
+            val jsonArray = readJSONArray(connection)
 
-            val stream = if (connection.responseCode in 200..299) {
-                connection.inputStream
-            } else {
-                connection.errorStream
-            }
-
-            val response = stream?.bufferedReader()?.readText() ?: ""
-            connection.disconnect()
-
-            if (response.isNotEmpty()) {
-                // Como es una lista, lo parseamos como JSONArray directamente
-                val jsonArray = org.json.JSONArray(response)
+            if (jsonArray != null) {
                 val offersList = mutableListOf<Offer>()
-
                 for (i in 0 until jsonArray.length()) {
                     val item = jsonArray.getJSONObject(i)
                     offersList.add(Offer.fromJson(item))
@@ -140,7 +124,21 @@ class ApiService {
                 null
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "getOffersList error: ${e.message}", e)
+            null
+        }
+    }
+
+    fun updateOfferStatus(token: String, offerId: Int, statusId: Int): JSONObject? {
+        return try {
+            val connection = openConnection("$BASE_URL/offers/$offerId", "PUT", token)
+            val body = JSONObject().apply {
+                put("estat_oferta_id", statusId)
+            }
+            writeBody(connection, body)
+            readJSONObject(connection)
+        } catch (e: Exception) {
+            Log.e(TAG, "updateOfferStatus error: ${e.message}", e)
             null
         }
     }
@@ -148,8 +146,11 @@ class ApiService {
     fun logout(token: String): JSONObject? {
         return try {
             val connection = openConnection("$BASE_URL/auth/logout", "POST", token)
-            readResponse(connection)
-        } catch (e: Exception) { null }
+            readJSONObject(connection)
+        } catch (e: Exception) {
+            Log.e(TAG, "logout error: ${e.message}", e)
+            null
+        }
     }
 
     private fun openConnection(url: String, method: String, token: String?) : HttpURLConnection {
@@ -173,17 +174,37 @@ class ApiService {
         }
     }
 
-    private fun readResponse(connection: HttpURLConnection): JSONObject? {
-        val stream = if (connection.responseCode in 200..299) {
-            connection.inputStream
-        } else { connection.errorStream }
-
-        val response = stream?.bufferedReader()?.readText() ?: ""
-        connection.disconnect()
-
-        return if (response.isNotEmpty()) { JSONObject(response) } else { null }
+    fun readJSONObject(connection: HttpURLConnection): JSONObject? {
+        val response = readRawResponse(connection)
+        if (response.isEmpty()) return null
+        return try {
+            val trimmed = response.trim()
+            if (trimmed.startsWith("[")) {
+                // If it's an array, wrap it in a "data" object for backward compatibility
+                JSONObject().put("data", JSONArray(trimmed))
+            } else {
+                JSONObject(trimmed)
+            }
+        } catch (e: Exception) {
+            Log.e("ApiService", "Error parsing JSONObject: ${e.message}", e)
+            null
+        }
     }
 
+    private fun readJSONArray(connection: HttpURLConnection): JSONArray? {
+        val response = readRawResponse(connection)
+        return if (response.isNotEmpty()) { JSONArray(response) } else { null }
+    }
 
-
+    private fun readRawResponse(connection: HttpURLConnection): String {
+        val stream = if (connection.responseCode in 200..299) {
+            connection.inputStream
+        } else {
+            connection.errorStream
+        }
+        val response = stream?.bufferedReader()?.readText() ?: ""
+        Log.d(TAG, "Request: ${connection.requestMethod} ${connection.url} | Code: ${connection.responseCode} | Response: $response")
+        connection.disconnect()
+        return response
+    }
 }

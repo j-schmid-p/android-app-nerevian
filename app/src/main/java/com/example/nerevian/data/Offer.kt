@@ -5,6 +5,7 @@ import org.json.JSONObject
 data class Offer(
     val id: Int,
     val status: String,
+    val statusId: Int,
     val cargoType: String?,
     val incoterm: String?,
     val origin: String?,
@@ -21,13 +22,23 @@ data class Offer(
     val flowType: String?,
     val containerType: String?,
     val shippingLine: String?,
+    val trackingStepName: String?,
+    val trackingStepId: Int?,
     val rawJson: String? = null,
     var isExpanded: Boolean = false
 ) {
     companion object {
         fun fromJson(json: JSONObject): Offer {
+            val trackingStepObj = json.optJSONObject("tracking_step")
+            val trackingStepName = trackingStepObj?.optString("nom")
+            val trackingStepId = if (json.isNull("tracking_step_id")) null else {
+                val id = json.optInt("tracking_step_id", -1)
+                if (id == -1) null else id
+            }
+
             val statusObj = json.optJSONObject("estat_oferta")
             val status = statusObj?.optString("estat") ?: "Pending"
+            val statusId = json.optInt("estat_oferta_id", 1)
 
             val cargoObj = json.optJSONObject("tipus_carrega")
             val cargoType = cargoObj?.optString("tipus")
@@ -71,6 +82,7 @@ data class Offer(
             return Offer(
                 id = json.getInt("id"),
                 status = status,
+                statusId = statusId,
                 cargoType = cargoType,
                 incoterm = incoterm,
                 origin = origin,
@@ -87,6 +99,8 @@ data class Offer(
                 flowType = flowType,
                 containerType = containerType,
                 shippingLine = shippingLine,
+                trackingStepName = trackingStepName,
+                trackingStepId = trackingStepId,
                 rawJson = json.toString()
             )
         }

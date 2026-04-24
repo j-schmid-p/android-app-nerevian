@@ -2,6 +2,7 @@ package com.example.nerevian.agent
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -42,6 +43,7 @@ class UpdateTrackingActivity : AppCompatActivity() {
         
         session = SessionManager(this)
         offerId = intent.getIntExtra("offer_id", -1)
+        val initialStatus = intent.getStringExtra("current_status")
 
         val mainView = findViewById<View>(R.id.main)
         ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
@@ -58,6 +60,9 @@ class UpdateTrackingActivity : AppCompatActivity() {
         btnCancel = findViewById(R.id.btn_cancel)
 
         tvOrderTitle.text = "Order #$offerId"
+        if (initialStatus != null) {
+            tvCurrentStatus.text = initialStatus
+        }
 
         val navView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         NavigationBar(this).setup(navView)
@@ -78,11 +83,15 @@ class UpdateTrackingActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 android.util.Log.d("UpdateTracking", "Current Result Raw: $currentResult")
                 
-                // 1. Parse Current Tracking Step from "tracking_step" key
+                // 1. Update Current Status ONLY if the API returned a valid step
+                // This prevents overwriting the Intent data with "No tracking set" on 404 errors
                 val stepObj = currentResult?.optJSONObject("tracking_step")
-                val currentStepName = stepObj?.optString("nom") ?: "No tracking set"
-                tvCurrentStatus.text = currentStepName
-                val currentStepId = stepObj?.optInt("id", -1) ?: -1
+                var currentStepId = -1
+                if (stepObj != null) {
+                    val currentStepName = stepObj.optString("nom") ?: "No tracking set"
+                    tvCurrentStatus.text = currentStepName
+                    currentStepId = stepObj.optInt("id", -1)
+                }
 
                 if (optionsResult != null) {
                     android.util.Log.d("UpdateTracking", "Options Result Raw: $optionsResult")
@@ -92,7 +101,6 @@ class UpdateTrackingActivity : AppCompatActivity() {
                     
                     statusList.clear()
                     val spinnerItems = mutableListOf<String>()
-                    spinnerItems.add("Choose status")
                     
                     if (stepsArray != null && stepsArray.length() > 0) {
                         var selectedIndex = 0
@@ -104,15 +112,27 @@ class UpdateTrackingActivity : AppCompatActivity() {
                             spinnerItems.add(name)
                             
                             if (id == currentStepId) {
-                                selectedIndex = i + 1
+                                selectedIndex = i
                             }
                         }
 
-                        val adapter = ArrayAdapter(this@UpdateTrackingActivity, android.R.layout.simple_spinner_item, spinnerItems)
+                        val adapter = object : ArrayAdapter<String>(this@UpdateTrackingActivity, android.R.layout.simple_spinner_item, spinnerItems) {
+                            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                                val v = super.getView(position, convertView, parent) as TextView
+                                v.setTextColor(getColor(R.color.darkBlueTitle))
+                                return v
+                            }
+
+                            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                                val v = super.getDropDownView(position, convertView, parent) as TextView
+                                v.setTextColor(getColor(R.color.darkBlueTitle))
+                                return v
+                            }
+                        }
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         spinnerNewStatus.adapter = adapter
                         
-                        if (selectedIndex > 0) {
+                        if (selectedIndex >= 0) {
                             spinnerNewStatus.setSelection(selectedIndex)
                         }
                     } else {
@@ -125,12 +145,12 @@ class UpdateTrackingActivity : AppCompatActivity() {
 
     private fun updateTracking() {
         val selectedPosition = spinnerNewStatus.selectedItemPosition
-        if (selectedPosition <= 0) {
+        if (selectedPosition < 0) {
             Toast.makeText(this, "Please select a new status", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val selectedStepPair = statusList[selectedPosition - 1]
+        val selectedStepPair = statusList[selectedPosition]
         val selectedStepId = selectedStepPair.first
         
         CoroutineScope(Dispatchers.IO).launch {

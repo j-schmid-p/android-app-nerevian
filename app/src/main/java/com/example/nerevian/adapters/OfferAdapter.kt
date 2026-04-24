@@ -112,6 +112,7 @@ class OfferAdapter(
                 try {
                     val intent = Intent(context, com.example.nerevian.agent.UpdateTrackingActivity::class.java)
                     intent.putExtra("offer_id", offer.id)
+                    intent.putExtra("current_status", offer.trackingStepName)
                     context.startActivity(intent)
                 } catch (e: Exception) {
                     android.util.Log.e("OfferAdapter", "Error starting UpdateTrackingActivity", e)
@@ -190,6 +191,13 @@ class OfferAdapter(
     override fun getItemCount() = offers.size
 
     fun updateData(newOffers: List<Offer>) {
+        val expandedIds = offers.filter { it.isExpanded }.map { it.id }.toSet()
+        newOffers.forEach { 
+            if (expandedIds.contains(it.id)) {
+                it.isExpanded = true
+            }
+        }
+
         offers = newOffers
         notifyDataSetChanged()
     }

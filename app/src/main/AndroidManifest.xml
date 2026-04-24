@@ -43,5 +43,8 @@
         <activity
             android:name=".client.TrackerActivity"
             android:exported="false" />
+        <activity
+            android:name=".agent.UpdateTrackingActivity"
+            android:exported="false" />
     </application>
 </manifest>

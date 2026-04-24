@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/ordernum_darkblue_rounded"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="15dp">
+        android:paddingVertical="15dp"
+        android:elevation="5dp"
+        android:background="@drawable/ordernum_darkblue_rounded">
 
         <TextView
             android:id="@+id/tv_order_id"
@@ -46,8 +47,11 @@
         android:id="@+id/order_expandable_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-16dp"
+        android:layout_marginBottom="0dp"
         android:background="@drawable/lightest_blue_bottom_rounded"
         android:orientation="vertical"
+        android:paddingTop="15dp"
         android:visibility="gone">
 
 
@@ -150,42 +154,56 @@
                 android:textColor="@color/beigeBackground"
                 android:textSize="16sp"
                 android:fontFamily="@font/jost_medium" />
-            <TextView
-                android:id="@+id/btn_update_tracking"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/btn_pink_rounded"
-                android:gravity="center"
-                android:text="UPDATE TRACKING"
-                android:fontFamily="@font/jost_black"
-                android:textColor="@color/beigeBackground"
-                android:textSize="16sp"
-                android:clickable="true"
-                android:focusable="true" />
         </LinearLayout>
-
-        <!-- Action Buttons (Client Accepted) -->
-        <LinearLayout
-            android:id="@+id/action_buttons_client"
+        <TextView
+            android:id="@+id/btn_update_tracking"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-            <TextView android:id="@+id/btn_see_info" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/btn_blue_see_info" android:gravity="center" android:text="SEE INFO" android:textColor="@color/beigeBackground" android:textStyle="bold" android:textSize="18sp" android:clickable="true" android:focusable="true" />
-            <TextView
-                android:id="@+id/btn_track"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/btn_red_track"
-                android:gravity="center"
-                android:text="TRACK"
-                android:textColor="@color/beigeBackground"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:clickable="true"
-                android:focusable="true" />
-        </LinearLayout>
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/btn_red_rounded"
+            android:gravity="center"
+            android:text="UPDATE"
+            android:fontFamily="@font/jost_black"
+            android:textColor="@color/beigeBackground"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:focusable="true" />
+
+
+    </LinearLayout>
+    <!-- Action Buttons (Client Accepted) -->
+    <LinearLayout
+        android:id="@+id/action_buttons_client"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/btn_see_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue_see_info"
+            android:gravity="center"
+            android:text="SEE INFO"
+            android:textColor="@color/beigeBackground"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:focusable="true" />
+        <TextView
+            android:id="@+id/btn_track"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_red_track"
+            android:gravity="center"
+            android:text="TRACK"
+            android:textColor="@color/beigeBackground"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
 </LinearLayout>

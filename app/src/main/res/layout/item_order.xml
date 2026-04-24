@@ -46,9 +46,10 @@
         android:id="@+id/order_expandable_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lightestBlueBackground"
+        android:background="@drawable/lightest_blue_bottom_rounded"
         android:orientation="vertical"
         android:visibility="gone">
+
 
         <!-- Info Grid (for Accepted/Agent) -->
         <GridLayout
@@ -114,10 +115,11 @@
             <TextView
                 android:id="@+id/btn_see_offer"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:background="@drawable/btn_red_rounded"
                 android:gravity="center"
                 android:text="SEE OFFER"
+                android:textSize="18sp"
                 android:textColor="@color/beigeBackground"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -167,7 +169,7 @@
         <LinearLayout
             android:id="@+id/action_buttons_client"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:orientation="horizontal"
             android:visibility="gone">
             <TextView android:id="@+id/btn_see_info" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/btn_blue_see_info" android:gravity="center" android:text="SEE INFO" android:textColor="@color/beigeBackground" android:textStyle="bold" android:textSize="18sp" android:clickable="true" android:focusable="true" />

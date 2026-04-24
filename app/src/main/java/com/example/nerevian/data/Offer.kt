@@ -21,11 +21,20 @@ data class Offer(
     val flowType: String?,
     val containerType: String?,
     val shippingLine: String?,
+    val trackingStepName: String?,
+    val trackingStepId: Int?,
     val rawJson: String? = null,
     var isExpanded: Boolean = false
 ) {
     companion object {
         fun fromJson(json: JSONObject): Offer {
+            val trackingStepObj = json.optJSONObject("tracking_step")
+            val trackingStepName = trackingStepObj?.optString("nom")
+            val trackingStepId = if (json.isNull("tracking_step_id")) null else {
+                val id = json.optInt("tracking_step_id", -1)
+                if (id == -1) null else id
+            }
+
             val statusObj = json.optJSONObject("estat_oferta")
             val status = statusObj?.optString("estat") ?: "Pending"
 
@@ -33,7 +42,11 @@ data class Offer(
             val cargoType = cargoObj?.optString("tipus")
 
             val incotermObj = json.optJSONObject("incoterm")
-            val incoterm = incotermObj?.optString("nom")
+            val tipusIncotermObj = incotermObj?.optJSONObject("tipus_incoterm")
+            // Try 'codi' first, then 'nom', then fallback to 'incoterm'
+            val incoterm = tipusIncotermObj?.optString("codi")?.trim() 
+                ?: tipusIncotermObj?.optString("nom")
+                ?: incotermObj?.optString("nom")
 
             val portOrigin = json.optJSONObject("port_origen")?.optString("nom")
             val airportOrigin = json.optJSONObject("aeroport_origen")?.optString("nom")
@@ -87,6 +100,8 @@ data class Offer(
                 flowType = flowType,
                 containerType = containerType,
                 shippingLine = shippingLine,
+                trackingStepName = trackingStepName,
+                trackingStepId = trackingStepId,
                 rawJson = json.toString()
             )
         }

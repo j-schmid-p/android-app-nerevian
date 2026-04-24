@@ -84,7 +84,7 @@ class ApiService {
 
     fun getCurrentTracking(token: String, offerId: Int): JSONObject? {
         return try {
-            val connection = openConnection("$BASE_URL/offers/$offerId/tracking/current", "GET", token)
+            val connection = openConnection("$BASE_URL/offers/$offerId/tracking-step", "GET", token)
             readJSONObject(connection)
         } catch (e: Exception) {
             Log.e(TAG, "getCurrentTracking error: ${e.message}", e)

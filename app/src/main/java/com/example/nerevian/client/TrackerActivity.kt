@@ -60,24 +60,31 @@ class TrackerActivity : AppCompatActivity() {
                         return@withContext
                     }
 
-                    val optionsArray = optionsResult.optJSONArray("data") ?: JSONArray()
-                    val currentData = currentResult?.optJSONObject("data")
-                    val currentId = currentData?.optInt("id", -1) ?: -1
+                    val optionsArray = optionsResult.optJSONArray("tracking_steps") ?: JSONArray()
+                    val currentStepObj = currentResult?.optJSONObject("tracking_step")
+                    val currentId = currentStepObj?.optInt("id", -1) ?: -1
 
-                    val steps = mutableListOf<String>()
-                    var currentStepIndex = -1
-
+                    // Create a list of pairs (id, name) to sort them correctly
+                    val stepsList = mutableListOf<Pair<Int, String>>()
                     for (i in 0 until optionsArray.length()) {
                         val step = optionsArray.getJSONObject(i)
-                        val id = step.getInt("id")
-                        val name = step.getString("nom")
-                        steps.add(name)
-                        if (id == currentId) {
-                            currentStepIndex = i
+                        stepsList.add(Pair(step.getInt("id"), step.getString("nom")))
+                    }
+
+                    // Sort steps by ID: lowest ID first as requested
+                    stepsList.sortBy { it.first }
+
+                    val stepsNames = mutableListOf<String>()
+                    var currentStepIndex = -1
+
+                    stepsList.forEachIndexed { index, pair ->
+                        stepsNames.add(pair.second)
+                        if (pair.first == currentId) {
+                            currentStepIndex = index
                         }
                     }
 
-                    renderSteps(steps, currentStepIndex)
+                    renderSteps(stepsNames, currentStepIndex)
                 }
             }
         }
@@ -96,30 +103,41 @@ class TrackerActivity : AppCompatActivity() {
 
             when {
                 index < currentStepIndex -> {
-                    // Completed steps
+                    // Completed steps: Dark circle, light italic font
                     circle.setImageResource(R.drawable.tracking_dark_circle)
-                    label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
-                    label.typeface = ResourcesCompat.getFont(this, R.font.jost_extralight)
-                    label.alpha = 0.5f
-                }
-                index == currentStepIndex -> {
-                    // Current active step
-                    circle.setImageResource(R.drawable.tracking_dark_circle)
-                    label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
-                    label.typeface = ResourcesCompat.getFont(this, R.font.jost_bold)
-                    label.alpha = 1.0f
-                }
-                else -> {
-                    // Future steps
-                    circle.setImageResource(R.drawable.tracking_light_circle)
+                    circle.layoutParams.width = (60 * resources.displayMetrics.density).toInt()
+                    circle.layoutParams.height = (60 * resources.displayMetrics.density).toInt()
+                    
                     label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
                     label.typeface = ResourcesCompat.getFont(this, R.font.jost_extralightitalic)
-                    label.alpha = 0.5f
+                    label.textSize = 22f
+                }
+                index == currentStepIndex -> {
+                    // Current active step: Dark circle, BOLD font, larger text
+                    circle.setImageResource(R.drawable.tracking_dark_circle)
+                    // Make current circle even larger
+                    circle.layoutParams.width = (80 * resources.displayMetrics.density).toInt()
+                    circle.layoutParams.height = (80 * resources.displayMetrics.density).toInt()
+                    
+                    label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
+                    label.typeface = ResourcesCompat.getFont(this, R.font.jost_bold)
+                    label.textSize = 28f
+                }
+                else -> {
+                    // Future steps: Light circle, light italic font
+                    circle.setImageResource(R.drawable.tracking_light_circle)
+                    circle.layoutParams.width = (60 * resources.displayMetrics.density).toInt()
+                    circle.layoutParams.height = (60 * resources.displayMetrics.density).toInt()
+                    
+                    label.setTextColor(ContextCompat.getColor(this, R.color.darkestBlueMainText))
+                    label.typeface = ResourcesCompat.getFont(this, R.font.jost_extralightitalic)
+                    label.textSize = 22f
                 }
             }
 
             stepsContainer.addView(stepView)
 
+            // Add an arrow after every step EXCEPT the last one
             if (index < steps.size - 1) {
                 val arrowView = inflater.inflate(R.layout.item_tracking_arrow, stepsContainer, false)
                 stepsContainer.addView(arrowView)

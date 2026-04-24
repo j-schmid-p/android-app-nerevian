@@ -40,7 +40,9 @@ class OrderHistoryClientFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         
         adapter = OfferAdapter(emptyList(), isAgent = false) { offer ->
-            Toast.makeText(requireContext(), "Opening offer for order #${offer.id}", Toast.LENGTH_SHORT).show()
+            val intent = android.content.Intent(requireContext(), TrackerActivity::class.java)
+            intent.putExtra("offer_id", offer.id)
+            startActivity(intent)
         }
         recyclerView.adapter = adapter
 

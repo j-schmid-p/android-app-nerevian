@@ -23,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
     private val apiService = ApiService()
     private val PREFERENCE_NAME = "session"
     private lateinit var loginBtn: Button
-    private lateinit var ipInput: EditText
     private val ROL_CLIENT = 1
     private val ROL_AGENT = 3
 
@@ -39,23 +38,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginBtn = findViewById(R.id.loginButton)
-        ipInput = findViewById(R.id.ipInput)
-
-        ipInput.setText(getSavedIp())
 
         loginBtn.setOnClickListener { validateInputs() }
 
         checkSession()
-    }
-
-    private fun getSavedIp(): String {
-        return getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-            .getString("base_ip", "10.0.2.2:8000") ?: "10.0.2.2:8000"
-    }
-
-    private fun saveIp(ip: String) {
-        getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-            .edit().putString("base_ip", ip).apply()
     }
 
     private fun checkSession() {
@@ -85,10 +71,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun callAPI(email: String, password: String) {
         loginBtn.isEnabled = false
-
-        val rawIp = ipInput.text.toString().trim().ifEmpty { "10.0.2.2:8000" }
-        saveIp(rawIp)
-        apiService.baseUrl = "http://$rawIp/api"
 
         CoroutineScope(Dispatchers.IO).launch {
             val loginResult = apiService.login(email, password)

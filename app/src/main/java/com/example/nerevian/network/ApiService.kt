@@ -25,7 +25,7 @@ class ApiService {
     // (canviar IP per la del PC que s'estigui fent servir)
     //IP si es corre amb movil endollat
     // (canviar IP per la del PC que s'estigui fent servir)
-    private val BASE_URL = "http://192.168.1.48:8000/api"
+     var BASE_URL = "http://192.168.1.48:8000/api"
     
     fun login(email: String, password: String) : JSONObject? {
         return try {

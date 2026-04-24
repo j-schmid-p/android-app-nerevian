@@ -137,7 +137,7 @@ class ApiService {
     fun uploadDni(token: String, file: File, mimeType: String): JSONObject? {
         return try {
             val boundary = "Boundary-${System.currentTimeMillis()}"
-            val url = URL("$baseUrl/profile/dni")
+            val url = URL("$BASE_URL/profile/dni")
             val connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
                 setRequestProperty("Authorization", "Bearer $token")
@@ -187,7 +187,7 @@ class ApiService {
      */
     fun getDniMetadata(token: String): JSONObject? {
         return try {
-            val connection = openConnection("$baseUrl/profile/dni", "GET", token)
+            val connection = openConnection("$BASE_URL/profile/dni", "GET", token)
             readJSONObject(connection)
         } catch (e: Exception) {
             Log.e(TAG, "getDniMetadata error: ${e.message}", e)

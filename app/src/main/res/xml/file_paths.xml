@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- internal filesDir — for profile_picture.jpg -->
+    <files-path name="internal_files" path="." />
+    <!-- cacheDir — for temp_camera_photo.jpg -->
+    <cache-path name="cache" path="." />
+</paths>

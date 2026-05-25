@@ -2,6 +2,8 @@
 <paths>
     <!-- internal filesDir — for profile_picture.jpg -->
     <files-path name="internal_files" path="." />
+    <!-- arxius subfolder — for downloaded DNI files -->
+    <files-path name="arxius" path="arxius/" />
     <!-- cacheDir — for temp_camera_photo.jpg -->
     <cache-path name="cache" path="." />
 </paths>

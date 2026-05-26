@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -29,27 +28,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.DataInputStream
-import java.io.DataOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.net.Socket
 
 class ProfileActivity : AppCompatActivity() {
 
-    // ── Server config ──────────────────────────────────────────────────────────
-    // Use "10.0.2.2" for the Android emulator (routes to PC localhost).
-    // Use your PC's local IP (e.g. "192.168.1.48") for a physical device.
-    // Find it with: ipconfig → IPv4 Address under your WiFi adapter.
-    // Your phone must be on the same WiFi network as the PC.
-    private val SERVER_HOST = " 192.168.1.48"
+    private val SERVER_HOST = "192.168.1.48"
     private val SERVER_PORT = 9090
-
-    // Local mirror of the server's arxius/ folder
     private val arxiusDir get() = File(filesDir, "arxius").also { it.mkdirs() }
 
-    // ── Activity fields ────────────────────────────────────────────────────────
     private val apiService = ApiService()
     private lateinit var session: SessionManager
     private lateinit var nameTxt: EditText
@@ -75,8 +66,6 @@ class ProfileActivity : AppCompatActivity() {
     private val cameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
         if (ok) openCamera() else toast("Camera permission denied")
     }
-
-    // ── Lifecycle ──────────────────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,8 +95,6 @@ class ProfileActivity : AppCompatActivity() {
         NavigationBar(this).setup(findViewById<BottomNavigationView>(R.id.bottom_navigation))
     }
 
-    // ── DNI Upload ────────────────────────────────────────────────────────────
-
     private fun showDniDialog() {
         AlertDialog.Builder(this)
             .setTitle("Upload DNI")
@@ -133,7 +120,6 @@ class ProfileActivity : AppCompatActivity() {
         cameraLauncher.launch(FileProvider.getUriForFile(this, "$packageName.provider", tempCameraFile))
     }
 
-    /** Called after camera capture. Uploads the captured photo to the server. */
     private fun uploadDni(src: File, filename: String, mime: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val ok = uploadFileToServer(src, filename)
@@ -149,7 +135,6 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    /** Called after gallery pick. Copies the URI to a temp file, then uploads. */
     private fun uploadDniFromUri(uri: Uri) {
         val filename = contentResolver.query(uri, null, null, null, null)?.use { c ->
             val col = c.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -158,7 +143,6 @@ class ProfileActivity : AppCompatActivity() {
         val mime = contentResolver.getType(uri) ?: "application/octet-stream"
 
         CoroutineScope(Dispatchers.IO).launch {
-            // Copy URI content to a temp file so we can read its bytes
             val tempFile = File(cacheDir, "temp_upload_${System.currentTimeMillis()}")
             var ok = false
             try {
@@ -181,43 +165,30 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Sends a file to the server byte by byte over a TCP socket.
-     * Protocol: filename (UTF) → "UPLOAD" (UTF) → fileSize (Long) → bytes
-     * Returns true if the server responds "OK".
-     *
-     * We use DataOutputStream.write(int) instead of OutputStreamWriter because
-     * OutputStreamWriter encodes bytes as UTF-8, which corrupts binary files
-     * (images, PDFs) by turning values > 127 into multi-byte sequences.
-     * write(int) sends exactly the low 8 bits as a single raw byte — safe for any file type.
-     */
     private fun uploadFileToServer(file: File, filename: String): Boolean {
         return try {
             Socket(SERVER_HOST, SERVER_PORT).use { socket ->
-                val dos = DataOutputStream(socket.getOutputStream())
-                val dis = DataInputStream(socket.getInputStream())
-                dos.writeUTF(filename)
-                dos.writeUTF("UPLOAD")
-                dos.writeLong(file.length())
-                dos.flush()
+                val out = socket.getOutputStream()
+                val inp = socket.getInputStream()
+                sendLine(out, filename)
+                sendLine(out, "UPLOAD")
+                sendLine(out, file.length().toString())
                 FileInputStream(file).use { fis ->
                     var b = fis.read()
                     while (b != -1) {
-                        dos.write(b) // writes exactly 1 raw byte (low 8 bits of int)
+                        out.write(b)
                         b = fis.read()
                     }
                 }
-                dos.flush()
-                dis.readUTF() == "OK"
+                out.flush()
+                readLine(inp) == "OK"
             }
         } catch (e: Exception) {
+            android.util.Log.e("FileTransfer", "Upload error: ${e.javaClass.simpleName}: ${e.message}", e)
             false
         }
     }
 
-    // ── DNI Download ──────────────────────────────────────────────────────────
-
-    /** Downloads the DNI from the server and opens it. */
     private fun downloadDni() {
         val filename = dniPrefs.getString("name", null) ?: return toast("No DNI uploaded yet")
         val mime     = dniPrefs.getString("mime", "*/*") ?: "*/*"
@@ -227,35 +198,29 @@ class ProfileActivity : AppCompatActivity() {
             val result = downloadFileFromServer(filename, destFile)
             withContext(Dispatchers.Main) {
                 when (result) {
-                    DownloadResult.OK -> openFile(destFile, mime)
+                    DownloadResult.OK       -> openFile(destFile, mime)
                     DownloadResult.NOT_FOUND -> toast("File not found on server")
-                    DownloadResult.ERROR -> toast("Download failed — is the server running?")
+                    DownloadResult.ERROR    -> toast("Download failed — is the server running?")
                 }
             }
         }
     }
 
-    /**
-     * Downloads a file from the server byte by byte.
-     * Protocol: filename (UTF) → "DOWNLOAD" (UTF) → server replies "EXISTS"/"NOT_FOUND"
-     * If EXISTS: fileSize (Long) → bytes
-     */
     private fun downloadFileFromServer(filename: String, destFile: File): DownloadResult {
         return try {
             Socket(SERVER_HOST, SERVER_PORT).use { socket ->
-                val dos = DataOutputStream(socket.getOutputStream())
-                val dis = DataInputStream(socket.getInputStream())
-                dos.writeUTF(filename)
-                dos.writeUTF("DOWNLOAD")
-                dos.flush()
-                when (dis.readUTF()) {
+                val out = socket.getOutputStream()
+                val inp = socket.getInputStream()
+                sendLine(out, filename)
+                sendLine(out, "DOWNLOAD")
+                when (readLine(inp)) {
                     "NOT_FOUND" -> DownloadResult.NOT_FOUND
                     "EXISTS" -> {
-                        val fileSize = dis.readLong()
+                        val fileSize = readLine(inp).toLong()
                         FileOutputStream(destFile).use { fos ->
                             var received = 0L
                             while (received < fileSize) {
-                                val b = dis.read()
+                                val b = inp.read()
                                 if (b == -1) break
                                 fos.write(b)
                                 received++
@@ -267,13 +232,29 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         } catch (e: Exception) {
+            android.util.Log.e("FileTransfer", "Download error: ${e.javaClass.simpleName}: ${e.message}", e)
             DownloadResult.ERROR
         }
     }
 
+    private fun sendLine(out: OutputStream, text: String) {
+        out.write(text.toByteArray(Charsets.UTF_8))
+        out.write('\n'.code)
+        out.flush()
+    }
+
+    private fun readLine(inp: InputStream): String {
+        val sb = StringBuilder()
+        var b = inp.read()
+        while (b != -1 && b != '\n'.code) {
+            sb.append(b.toChar())
+            b = inp.read()
+        }
+        return sb.toString()
+    }
+
     private enum class DownloadResult { OK, NOT_FOUND, ERROR }
 
-    /** Opens a local file with an external app via FileProvider. */
     private fun openFile(file: File, mime: String) {
         try {
             val uri = FileProvider.getUriForFile(this, "$packageName.provider", file)
@@ -288,8 +269,6 @@ class ProfileActivity : AppCompatActivity() {
             toast("Cannot open file: ${e.message}")
         }
     }
-
-    // ── Profile ───────────────────────────────────────────────────────────────
 
     private fun loadUserData() {
         nameTxt.setText(session.name)

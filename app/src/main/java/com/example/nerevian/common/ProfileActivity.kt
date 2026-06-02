@@ -53,8 +53,6 @@ class ProfileActivity : AppCompatActivity() {
     private val dniPrefs by lazy { getSharedPreferences("profile_prefs", MODE_PRIVATE) }
     private val tempCameraFile get() = File(cacheDir, "temp_dni.jpg")
 
-    // ── Launchers ──────────────────────────────────────────────────────────────
-
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
         if (ok) uploadDni(tempCameraFile, "dni_photo.jpg", "image/jpeg")
     }

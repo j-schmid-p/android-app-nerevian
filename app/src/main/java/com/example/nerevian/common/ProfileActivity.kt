@@ -37,7 +37,7 @@ import java.net.Socket
 
 class ProfileActivity : AppCompatActivity() {
 
-    private val SERVER_HOST = "192.168.1.48"
+    private val SERVER_HOST = "192.168.1.65"
     private val SERVER_PORT = 9090
     private val arxiusDir get() = File(filesDir, "arxius").also { it.mkdirs() }
 

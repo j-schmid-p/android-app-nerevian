@@ -164,28 +164,26 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun uploadFileToServer(file: File, filename: String): Boolean {
-        return try {
-            Socket(SERVER_HOST, SERVER_PORT).use { socket ->
-                val out = socket.getOutputStream()
-                val inp = socket.getInputStream()
-                sendLine(out, filename)
-                sendLine(out, "UPLOAD")
-                sendLine(out, file.length().toString())
-                FileInputStream(file).use { fis ->
-                    var b = fis.read()
-                    while (b != -1) {
-                        out.write(b)
-                        b = fis.read()
-                    }
+    return try {
+        Socket(SERVER_HOST, SERVER_PORT).use { socket ->
+            val out = socket.getOutputStream()
+            sendLine(out, filename)
+            sendLine(out, "UPLOAD")
+            FileInputStream(file).use { fis ->
+                var b = fis.read()
+                while (b != -1) {
+                    out.write(b)
+                    b = fis.read()
                 }
-                out.flush()
-                readLine(inp) == "OK"
             }
-        } catch (e: Exception) {
-            android.util.Log.e("FileTransfer", "Upload error: ${e.javaClass.simpleName}: ${e.message}", e)
-            false
+            out.flush()
+            true  // si no hi ha excepció, és que ha anat bé
         }
+    } catch (e: Exception) {
+        android.util.Log.e("FileTransfer", "Upload error: ${e.message}", e)
+        false
     }
+}
 
     private fun downloadDni() {
         val filename = dniPrefs.getString("name", null) ?: return toast("No DNI uploaded yet")

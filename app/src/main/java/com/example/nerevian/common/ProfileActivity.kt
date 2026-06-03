@@ -177,7 +177,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
             out.flush()
-            true  // si no hi ha excepció, és que ha anat bé
+            true
         }
     } catch (e: Exception) {
         android.util.Log.e("FileTransfer", "Upload error: ${e.message}", e)
@@ -214,7 +214,7 @@ class ProfileActivity : AppCompatActivity() {
                     "YES" -> {
     FileOutputStream(destFile).use { fos ->
         var b = inp.read()
-        while (b != -1) {   // llegeix fins que el servidor tanqui la connexió
+        while (b != -1) {
             fos.write(b)
             b = inp.read()
         }

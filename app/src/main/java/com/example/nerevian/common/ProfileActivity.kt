@@ -214,17 +214,15 @@ class ProfileActivity : AppCompatActivity() {
                 when (readLine(inp)) {
                     "NO" -> DownloadResult.NOT_FOUND
                     "YES" -> {
-                        val fileSize = readLine(inp).toLong()
-                        FileOutputStream(destFile).use { fos ->
-                            var received = 0L
-                            while (received < fileSize) {
-                                val b = inp.read()
-                                if (b == -1) break
-                                fos.write(b)
-                                received++
-                            }
-                        }
-                        DownloadResult.OK
+    FileOutputStream(destFile).use { fos ->
+        var b = inp.read()
+        while (b != -1) {   // llegeix fins que el servidor tanqui la connexió
+            fos.write(b)
+            b = inp.read()
+        }
+    }
+    DownloadResult.OK
+}
                     }
                     else -> DownloadResult.ERROR
                 }

@@ -212,8 +212,8 @@ class ProfileActivity : AppCompatActivity() {
                 sendLine(out, filename)
                 sendLine(out, "DOWNLOAD")
                 when (readLine(inp)) {
-                    "NOT_FOUND" -> DownloadResult.NOT_FOUND
-                    "EXISTS" -> {
+                    "NO" -> DownloadResult.NOT_FOUND
+                    "YES" -> {
                         val fileSize = readLine(inp).toLong()
                         FileOutputStream(destFile).use { fos ->
                             var received = 0L
